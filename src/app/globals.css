@@ -2,20 +2,69 @@
 @tailwind components;
 @tailwind utilities;
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+
+@layer base {
+
+  /* DISPLAY QUILL DATA */
+  .article p{
+    @apply mb-2;
+  }
+  .article ul{
+    @apply list-disc ml-6 mb-2 ;
+  }
+  .article ul li{
+    @apply mb-1 leading-tight;
+  }
+  .article i{
+    @apply italic;
+  }
+  .article u{
+    @apply underline;
+  }
+  .article b, .article strong{
+    @apply font-semibold;
+  }
+  .article strong{
+    @apply font-medium;
   }
 }
 
-body {
-  color: var(--foreground);
-  background: var(--background);
-  font-family: Arial, Helvetica, sans-serif;
+
+
+/* SCROLL BAR WIDTH & COLOR */
+.scroll__width::-webkit-scrollbar {
+    width: 0.5em;
 }
+.scroll__width::-webkit-scrollbar-track {
+    box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+}
+.scroll__width::-webkit-scrollbar-thumb {
+    background-color: slategrey;
+    outline: 1px solid slategrey;
+}
+
+
+/* SWIPER */
+.swiper-button-next,
+.swiper-button-prev {
+    /* background-color: white;
+    background-color: rgba(255, 255, 255, 0.7); */
+    right:10px;
+    padding: 30px;
+    border-radius: 25%;
+    display:flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.8rem;
+    color: white !important;
+    fill: white !important;
+    stroke: white !important;
+}
+.swiper-pagination-bullet {
+    background-color: lightgray !important;
+}
+.swiper-pagination-bullet-active {
+    background-color: white !important;
+}
+
