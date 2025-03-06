@@ -2,9 +2,11 @@ import Link from 'next/link'
 import React from 'react'
 import { FaAngleRight } from 'react-icons/fa6'
 import RoleList from './_components/RoleList'
+import { _roleListAction } from '@/actions/RoleActions'
 
 
-export default function page() {
+export default async function page() {
+  const [rolesData] = await Promise.all([_roleListAction(), ])
   return (
     <>
     <section className='w-[100%]'>
@@ -29,7 +31,7 @@ export default function page() {
         </div>
     </section>
 
-    <RoleList />
+    <RoleList dbData={rolesData} />
     </>
   )
 }

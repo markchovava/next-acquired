@@ -10,6 +10,7 @@ export default function page() {
     <section className='w-full bg-gray-200'>
         <div className='mx-auto w-[90%] flex lg:flex-row flex-col items-center justify-start gap-6 py-10'>
             <div className='flex-1 w-[100%]'>
+              <p className='text-sm mb-1'>Province:</p>
               <select placeholder='Province' className='w-[100%] rounded-lg border border-slate-300 outline-none p-4'>
                 <option value="">Select an option.</option>
                 <option value="Harare">Harare</option>
@@ -18,6 +19,7 @@ export default function page() {
               </select>
             </div>
             <div className='flex-1 w-[100%]'>
+              <p className='text-sm mb-1'>City:</p>
               <select placeholder='Province' className='w-[100%] rounded-lg border border-slate-300 outline-none p-4'>
                 <option value="">Select an option.</option>
                 <option value="Harare">Harare</option>
@@ -26,6 +28,7 @@ export default function page() {
               </select>
             </div>
             <div className='flex-1 w-[100%]'>
+              <p className='text-sm mb-1'>Category:</p>
               <select placeholder='Province' className='w-[100%] rounded-lg border border-slate-300 outline-none p-4'>
                 <option value="">Select an option.</option>
                 <option value="Harare">Harare</option>
@@ -34,6 +37,7 @@ export default function page() {
               </select>
             </div>
             <div className='flex-1 w-[100%]'>
+            <p className='text-sm mb-1'>Price Range:</p>
               <select placeholder='Province' className='w-[100%] rounded-lg border border-slate-300 outline-none p-4'>
                 <option value="">Select an option.</option>
                 <option value="Harare">Harare</option>
@@ -41,7 +45,7 @@ export default function page() {
                 <option value="Harare">Harare</option>
               </select>
             </div>
-            <div className='flex-1 w-[100%]'>
+            <div className='flex-1 w-[100%] pt-2 lg:pt-6'>
               <button 
                 type='submit' 
                 className='flex justify-center items-center gap-3 bg-slate-900 hover:drop-shadow-lg text-white py-4 rounded-lg w-[100%]'>
@@ -80,7 +84,7 @@ export default function page() {
           <h3 className='my-12 font-serif text-[2rem] leading-tight'>Lorem ipsum dolor sit amet.</h3>
           <div className='flex justify-between items-center'>
             <Link href="#" className='text-xl font-serif underline hover:no-underline ease-linear'>Contact</Link>
-            <Link href="#" className='group rounded-lg px-6 py-3 bg-slate-900 text-white hover:drop-shadow-md flex items-center justify-center gap-2 ease-linear transition-all duration-100'>
+            <Link href="/marketplace/1" className='group rounded-lg px-6 py-3 bg-slate-900 text-white hover:drop-shadow-md flex items-center justify-center gap-2 ease-linear transition-all duration-100'>
               Details
               <FaArrowRightLong className="ease-linear transition-all duration-100 group-hover:translate-x-1" />
             </Link>

@@ -4,6 +4,12 @@ import Header from "./_components/Header";
 import Footer from "./_components/Footer";
 import TopAdminNav from "./_components/TopAdminNav";
 
+/* ToastContainer */
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+
+
+
 const geistSans = Geist({
   variable: "--font-geist-sans",
   subsets: ["latin"],
@@ -29,6 +35,19 @@ export default function RootLayout({ children }) {
         <Header />
         {children}
         <Footer />
+
+        <ToastContainer
+          position="top-right"
+          autoClose={5000}
+          hideProgressBar={false}
+          newestOnTop={false}
+          closeOnClick
+          rtl={false}
+          pauseOnFocusLoss
+          draggable
+          pauseOnHover
+          theme="colored" 
+        />
       </body>
     </html>
   );

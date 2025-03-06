@@ -1,8 +1,12 @@
 "use client";
+import { _faqStoreAction } from '@/actions/FaqActions';
 import RichTextEditor from '@/app/_components/RichTextEditor';
+import { reactToastifyDark } from '@/utils/reactToastify';
 import { AnimatePresence, motion } from 'framer-motion';
 import React, { useState } from 'react'
 import { IoClose } from 'react-icons/io5';
+import { toast } from 'react-toastify';
+
 
 
 const variants = {
@@ -14,12 +18,55 @@ const variants = {
 }
 
 
-export default function FaqAddModal({isModal, setIsModal}) {
+export default function FaqAddModal({getData, isModal, setIsModal}) {
+    const [data, setData] = useState({});
     const [description, setDescription] = useState("");
-    const [data, setData] = useState({})
+    const [errMsg, setErrMsg] = useState({})
+    const [isSubmit, setIsSubmit] = useState(false)
     const handleInput = (e) => {
-        setInputData({...inputData, [e.target.name]: e.target.value});
+        setData({...data, [e.target.name]: e.target.value});
     }
+
+    async function postData() {
+            if(!data?.title){
+                const message = "Title is required."
+                toast.warn(message, reactToastifyDark)
+                setErrMsg({title: message})
+                setIsSubmit(false)
+                return
+            }
+            if(!description){
+                const message = "Description is required."
+                toast.warn(message, reactToastifyDark)
+                setErrMsg({description: message})
+                setIsSubmit(false)
+                return
+            }
+            const formData = {
+                title: data?.title,
+                description: description,
+            }
+            try{
+                const res = await _faqStoreAction(formData);
+                console.log(res);
+                if(res.status == 1) {
+                    await getData();
+                    toast.success(res.message, reactToastifyDark);
+                    setData({});
+                    setDescription('');
+                    setErrMsg({});
+                    setIsSubmit(false)
+                    setIsModal(false);
+                    return;
+                }
+                } catch (error) {
+                    console.error(`Error: ${error}`);
+                    setIsSubmit(false)
+                    return;
+            }
+    }
+
+    
   return (
     <>
     <AnimatePresence>
@@ -38,7 +85,7 @@ export default function FaqAddModal({isModal, setIsModal}) {
                     <IoClose className='text-2xl' />
                 </button>
                 </div>
-                <form>
+                <form action={postData} onSubmit={() => setIsSubmit(true)}>
                    <h2 className='font-serif text-[2.6rem] mb-6 text-center border-b border-gray-300'>
                     Add FAQ
                     </h2>
@@ -47,22 +94,26 @@ export default function FaqAddModal({isModal, setIsModal}) {
                         <p className='mb-2 leading-none text-sm font-semibold'>Title:</p>
                         <input 
                             type='text' 
-                            name='name'
-                            placeholder='Name' 
+                            name='title'
+                            onChange={handleInput}
+                            placeholder='Title' 
                             className='w-[100%] rounded-xl border border-gray-300 outline-none p-3' />
+                        { errMsg?.title && 
+                            <p className='text-red-600 text-sm'>{errMsg?.title}</p> }
                     </div>
                     {/*  */}
                     <div className='w-[100%] mb-6'>
                         <p className='mb-2 leading-none text-sm font-semibold'>Description:</p>
                         <div className='w-[100%] h-auto mb-12 overflow-hidden'>
                         <RichTextEditor content={description} setContent={setDescription} />
+                        { errMsg?.description && 
+                            <p className='text-red-600 text-sm'>{errMsg?.description}</p> }
                         </div>
                     </div>
                     
-                    
                     <div className='w-[100%] mb-6'>
                         <button type='submit' className='w-[100%] rounded-xl bg-gray-800 hover:bg-gray-900 hover:drop-shadow-lg ease-linear transition-all duration-150 text-white py-4'>
-                            Submit
+                            {isSubmit ? 'Processing' : 'Submit' }
                         </button>
                     </div>
 

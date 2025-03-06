@@ -1,11 +1,18 @@
 "use client"
 import React, { useState } from 'react'
 import RoleEditModal from './RoleEditModal';
+import { _roleViewAction } from '@/actions/RoleActions';
 
 
 
-export default function RoleView() {
+export default function RoleView({ dbData, id }) {
   const [isModal, setIsModal] = useState(false);
+  const [data, setData] = useState(dbData?.data);
+
+  async function getData(){
+    const res = await _roleViewAction(id);
+    setData(res?.data);
+  }
   
   return (
     <>
@@ -21,24 +28,31 @@ export default function RoleView() {
             {/* NAME */}
             <div className='mb-6'>
                 <p className='text-sm font-semibold'>Name:</p>
-                <p className='text-lg'>N/A</p>
+                <p className='text-lg'>{data?.name ?? 'Not Added.'}</p>
             </div>
-            {/* AADDRESS */}
+            {/* LEVEL */}
             <div className='mb-6'>
                 <p className='text-sm font-semibold'>Level:</p>
-                <p className='text-lg'>N/A</p>
+                <p className='text-lg'>{data?.level ?? 'Not Added.'}</p>
             </div>
-          
             {/* */}
             <div className='mb-6'>
                 <p className='text-sm font-semibold'>Author:</p>
-                <p className='text-lg'>N/A</p>
+                <p className='text-lg'>
+                    {data?.user?.name ? data?.user?.name : (data?.user?.email ? data?.user?.email : 'Not Added.')}
+                </p>
             </div>
         </div>
     </section>
 
-    <RoleEditModal isModal={isModal} setIsModal={setIsModal} />
 
+    <RoleEditModal 
+        id={id}
+        domData={data} 
+        getData={getData} 
+        isModal={isModal} 
+        setIsModal={setIsModal} 
+    />
 
     </>
   )

@@ -1,10 +1,16 @@
-import Link from 'next/link'
-import React from 'react'
-import { FaAngleRight } from 'react-icons/fa6'
-import BusinessList from './_components/BusinessList'
+import Link from 'next/link';
+import React from 'react';
+import { FaAngleRight } from 'react-icons/fa6';
+import BusinessList from './_components/BusinessList';
+import { _businessListAction } from '@/actions/BusinessActions';
+import { _cityListAllAction } from '@/actions/CityActions';
+import { _provinceListAllAction } from '@/actions/ProvinceActions';
 
 
-export default function page() {
+export default async function page() {
+  const [businessData, citiesData, provincesData, ] = await Promise.all([_businessListAction(), _cityListAllAction(), _provinceListAllAction(), ]);
+
+
   return (
     <>
     <section className='w-[100%]'>
@@ -15,7 +21,7 @@ export default function page() {
           <li><FaAngleRight /></li>
           <li><Link href="/admin">Dashboard</Link></li>
           <li><FaAngleRight /></li>
-          <li><Link href="/admin/partner" className='font-bold '>Business List</Link></li>
+          <li><Link href="/admin/business" className='font-bold '>Business List</Link></li>
 
         </ul>
       </div>
@@ -29,7 +35,13 @@ export default function page() {
         </div>
     </section>
 
-    <BusinessList />
+    <BusinessList 
+        dbData={businessData} 
+        citiesData={citiesData} 
+        provincesData={provincesData}
+    />
+
+
     </>
   )
 }

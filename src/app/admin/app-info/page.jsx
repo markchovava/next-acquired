@@ -2,11 +2,14 @@ import Link from 'next/link'
 import React from 'react'
 import { FaAngleRight } from 'react-icons/fa6'
 import AppInfoView from './_components/AppInfoView'
+import { _appInfoViewAction } from '@/actions/AppInfoActions'
 
 
 
 
-export default function page() {
+export default async function page() {
+  const [appInfoData] = await Promise.all([_appInfoViewAction(),  ]) 
+  
   return (
     <>
      <section className='w-[100%]'>
@@ -32,7 +35,7 @@ export default function page() {
     </section>
 
 
-    <AppInfoView />
+    <AppInfoView dbData={appInfoData} />
 
 
 

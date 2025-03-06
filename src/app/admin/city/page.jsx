@@ -2,9 +2,15 @@ import Link from 'next/link'
 import React from 'react'
 import { FaAngleRight } from 'react-icons/fa6'
 import CityList from './_components/CityList'
+import { _cityListAction } from '@/actions/CityActions'
+import { _provinceListAllAction } from '@/actions/ProvinceActions'
 
 
-export default function page() {
+
+
+export default async function page() {
+  const [citiesData, provincesData] = await Promise.all([_cityListAction(), _provinceListAllAction()])
+
   return (
     <>
     <section className='w-[100%]'>
@@ -29,7 +35,7 @@ export default function page() {
         </div>
     </section>
 
-    <CityList />
+    <CityList dbData={citiesData} provincesData={provincesData} />
     </>
   )
 }

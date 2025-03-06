@@ -2,11 +2,13 @@ import Link from 'next/link'
 import React from 'react'
 import { FaAngleRight } from 'react-icons/fa6'
 import MembershipView from './_components/MembershipView'
+import { _membershipViewAction } from '@/actions/MembershipActions'
 
 
+export default async function page({ params: {id} }) {
+  const [membershipData, ] = await Promise.all([_membershipViewAction(id), ])
 
 
-export default function page() {
   return (
     <>
      <section className='w-[100%]'>
@@ -19,7 +21,7 @@ export default function page() {
           <li><FaAngleRight /></li>
           <li><Link href="/admin/membership">Membership List</Link></li>
           <li><FaAngleRight /></li>
-          <li><Link href="/admin/membership/1" className='font-bold '>Membership</Link></li>
+          <li><Link href={`/admin/membership/${id}`} className='font-bold '>Membership</Link></li>
 
         </ul>
       </div>
@@ -34,7 +36,7 @@ export default function page() {
     </section>
 
 
-    <MembershipView />
+    <MembershipView id={id} dbData={membershipData} />
 
 
 

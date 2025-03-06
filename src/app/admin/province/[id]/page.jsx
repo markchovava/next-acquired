@@ -2,11 +2,14 @@ import Link from 'next/link'
 import React from 'react'
 import { FaAngleRight } from 'react-icons/fa6'
 import ProvinceView from './_components/ProvinceView'
+import { _provinceViewAction } from '@/actions/ProvinceActions'
 
 
 
 
-export default function page() {
+export default async function page({ params: {id} }) {
+  const [provinceData, ] = await Promise.all([_provinceViewAction(id), ])
+
   return (
     <>
      <section className='w-[100%]'>
@@ -19,7 +22,7 @@ export default function page() {
           <li><FaAngleRight /></li>
           <li><Link href="/admin/province">Province List</Link></li>
           <li><FaAngleRight /></li>
-          <li><Link href="/admin/province/1" className='font-bold '>Province</Link></li>
+          <li><Link href={`/admin/province/${id}`} className='font-bold '>Province</Link></li>
 
         </ul>
       </div>
@@ -34,7 +37,7 @@ export default function page() {
     </section>
 
 
-    <ProvinceView />
+    <ProvinceView id={id} dbData={provinceData} />
 
 
 

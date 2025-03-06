@@ -1,7 +1,10 @@
 "use client";
+import { _provinceUpdateAction } from '@/actions/ProvinceActions';
+import { reactToastifyDark } from '@/utils/reactToastify';
 import { AnimatePresence, motion } from 'framer-motion';
 import React, { useState } from 'react'
 import { IoClose } from 'react-icons/io5';
+import { toast } from 'react-toastify';
 
 
 const variants = {
@@ -13,11 +16,43 @@ const variants = {
 }
 
 
-export default function ProvinceEditModal({isModal, setIsModal}) {
-    const [data, setData] = useState({})
+export default function ProvinceEditModal({id, getData, domData, isModal, setIsModal}) {
+   const [data, setData] = useState(domData)
+    const [errMsg, setErrMsg] = useState({})
+    const [isSubmit, setIsSubmit] = useState(false)
     const handleInput = (e) => {
-        setInputData({...inputData, [e.target.name]: e.target.value});
+        setData({...data, [e.target.name]: e.target.value});
     }
+       
+    async function postData() {
+        if(!data?.name){
+            const message = "Name is required."
+            toast.warn(message, reactToastifyDark)
+            setErrMsg({name: message})
+            setIsSubmit(false)
+            return
+        }
+        const formData = {
+            name: data?.name,
+        }
+        try{
+            const res = await _provinceUpdateAction(formData, id);
+            if(res?.status == 1) {
+                await getData();
+                toast.success(res?.message, reactToastifyDark);
+                setErrMsg({});
+                setIsSubmit(false)
+                setIsModal(false);
+                return;
+            }
+            } catch (error) {
+                console.error(`Error: ${error}`);
+                setIsSubmit(false)
+                return;
+        }
+    }
+
+
   return (
     <>
     <AnimatePresence>
@@ -36,7 +71,7 @@ export default function ProvinceEditModal({isModal, setIsModal}) {
                     <IoClose className='text-2xl' />
                 </button>
                 </div>
-                <form>
+                <form action={postData} onSubmit={() => setIsSubmit(true)}>
                    <h2 className='font-serif text-[2.6rem] mb-6 text-center border-b border-gray-300'>
                     Edit Province
                     </h2>
@@ -46,14 +81,17 @@ export default function ProvinceEditModal({isModal, setIsModal}) {
                         <input 
                             type='text' 
                             name='name'
+                            value={data?.name}
+                            onChange={handleInput}
                             placeholder='Name' 
                             className='w-[100%] rounded-xl border border-gray-300 outline-none p-3' />
-                    </div>
-                                 
+                        {errMsg?.name &&
+                        <p className='text-red-600 text-sm'>{errMsg?.name}</p>}
+                    </div>         
 
                     <div className='w-[100%] mb-6'>
                         <button type='submit' className='w-[100%] rounded-xl bg-gray-800 hover:bg-gray-900 hover:drop-shadow-lg ease-linear transition-all duration-150 text-white py-4'>
-                            Submit
+                            { isSubmit ? 'Processing' : 'Submit' }
                         </button>
                     </div>
 

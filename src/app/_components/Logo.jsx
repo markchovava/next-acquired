@@ -7,7 +7,7 @@ export default function Logo() {
   return (
     <div className=''>
         <Link href="/">
-            <h1 className='font-extrabold leading-tight text-[2.5rem]'>
+            <h1 className='font-medium leading-tight text-[2.5rem]'>
                 AcquiredZw
             </h1>
         </Link>

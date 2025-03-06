@@ -1,11 +1,18 @@
 "use client"
 import React, { useState } from 'react'
 import MembershipEditModal from './MembershipEditModal';
+import { _membershipViewAction } from '@/actions/MembershipActions';
 
 
 
-export default function MembershipView() {
-  const [isModal, setIsModal] = useState(false);
+export default function MembershipView({id, dbData}) {
+    const [isModal, setIsModal] = useState(false);
+    const [data, setData] = useState(dbData?.data);
+
+    async function getData() {
+        const res = await _membershipViewAction(id);
+        setData(res?.data);
+    }
   
   return (
     <>
@@ -21,23 +28,36 @@ export default function MembershipView() {
             {/* NAME */}
             <div className='mb-6'>
                 <p className='text-sm font-semibold'>Name:</p>
-                <p className='text-lg'>N/A</p>
+                <p className='text-lg'>{data?.name}</p>
+            </div>
+            {/* FEE */}
+            <div className='mb-6'>
+                <p className='text-sm font-semibold'>Fee:</p>
+                <p className='text-lg'>{data?.fee ? '$' + data?.fee : 'Not Added.'}</p>
             </div>
             {/* DESCRIPTION */}
             <div className='mb-6'>
                 <p className='text-sm font-semibold'>Description:</p>
-                <p className='text-lg'>N/A</p>
+                <div className='text-lg article leading-tight' 
+                    dangerouslySetInnerHTML={{ __html: data?.description }}></div>
             </div>
-          
-            {/* */}
+            {/* AUTHOR */}
             <div className='mb-6'>
                 <p className='text-sm font-semibold'>Author:</p>
-                <p className='text-lg'>N/A</p>
+                <p className='text-lg'>
+                {data?.user?.name ? data?.user?.name : (data?.user?.email ? data?.user?.email : 'Not Added.')}
+                </p>
             </div>
         </div>
     </section>
 
-    <MembershipEditModal isModal={isModal} setIsModal={setIsModal} />
+    <MembershipEditModal 
+        id={id}
+        domData={data} 
+        getData={getData} 
+        isModal={isModal} 
+        setIsModal={setIsModal}
+    />
 
 
     </>

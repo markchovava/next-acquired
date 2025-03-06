@@ -1,11 +1,19 @@
 "use client"
 import React, { useState } from 'react'
 import CityEditModal from './CityEditModal';
+import { _cityViewAction } from '@/actions/CityActions';
 
 
 
-export default function CityView() {
+export default function CityView({id, dbData, provinces}) {
   const [isModal, setIsModal] = useState(false);
+      const [data, setData] = useState(dbData?.data);
+      const [provincesData, setProvincesData] = useState(provinces?.data)
+      
+      async function getData() {
+          const res = await _cityViewAction(id);
+          setData(res?.data);
+      }
   
   return (
     <>
@@ -21,23 +29,32 @@ export default function CityView() {
             {/* NAME */}
             <div className='mb-6'>
                 <p className='text-sm font-semibold'>Name:</p>
-                <p className='text-lg'>N/A</p>
+                <p className='text-lg'>{data?.name}</p>
             </div>
             {/* AADDRESS */}
             <div className='mb-6'>
                 <p className='text-sm font-semibold'>Province:</p>
-                <p className='text-lg'>N/A</p>
+                <p className='text-lg'>{data?.province?.name ? data?.province?.name : 'Not added'}</p>
             </div>
           
             {/* */}
             <div className='mb-6'>
                 <p className='text-sm font-semibold'>Author:</p>
-                <p className='text-lg'>N/A</p>
+                <p className='text-lg'>
+                {data?.user?.name ? data?.user?.name : (data?.user?.email ? data?.user?.email : 'Not Added.')}
+                </p>
             </div>
         </div>
     </section>
 
-    <CityEditModal isModal={isModal} setIsModal={setIsModal} />
+    <CityEditModal 
+        id={id} 
+        domData={data}
+        getData={getData} 
+        isModal={isModal} 
+        setIsModal={setIsModal} 
+        provincesData={provincesData}
+    />
 
 
     </>

@@ -1,7 +1,10 @@
 "use client";
+import { _roleStoreAction } from '@/actions/RoleActions';
+import { reactToastifyDark } from '@/utils/reactToastify';
 import { AnimatePresence, motion } from 'framer-motion';
 import React, { useState } from 'react'
 import { IoClose } from 'react-icons/io5';
+import { toast } from 'react-toastify';
 
 
 const variants = {
@@ -13,11 +16,51 @@ const variants = {
 }
 
 
-export default function RoleAddModal({isModal, setIsModal}) {
+export default function RoleAddModal({getData, isModal, setIsModal}) {
     const [data, setData] = useState({})
+    const [errMsg, setErrMsg] = useState({})
+    const [isSubmit, setIsSubmit] = useState(false)
     const handleInput = (e) => {
-        setInputData({...inputData, [e.target.name]: e.target.value});
+        setData({...data, [e.target.name]: e.target.value});
     }
+
+    async function postData() {
+        if(!data?.name){
+            const message = "Name is required."
+            toast.warn(message, reactToastifyDark)
+            setErrMsg({name: message})
+            setIsSubmit(false)
+            return
+        }
+        if(!data?.level){
+            const message = "Level is required."
+            toast.warn(level, reactToastifyDark)
+            setErrMsg({name: message})
+            setIsSubmit(false)
+            return
+        }
+        const formData = {
+            name: data?.name,
+            level: data?.level,
+        }
+        try{
+            const res = await _roleStoreAction(formData);
+            if(res.status == 1) {
+                await getData();
+                toast.success(res.message, reactToastifyDark);
+                setData({});
+                setErrMsg({});
+                setIsSubmit(false)
+                setIsModal(false);
+                return;
+            }
+            } catch (error) {
+                console.error(`Error: ${error}`);
+                setIsSubmit(false)
+                return;
+        }
+    }
+
   return (
     <>
     <AnimatePresence>
@@ -36,7 +79,7 @@ export default function RoleAddModal({isModal, setIsModal}) {
                     <IoClose className='text-2xl' />
                 </button>
                 </div>
-                <form>
+                <form action={postData} onSubmit={() => setIsSubmit(true)}>
                    <h2 className='font-serif text-[2.6rem] mb-6 text-center border-b border-gray-300'>
                     Add Role
                     </h2>
@@ -46,32 +89,35 @@ export default function RoleAddModal({isModal, setIsModal}) {
                         <input 
                             type='text' 
                             name='name'
+                            onChange={handleInput}
+                            value={data?.name}
                             placeholder='Name' 
                             className='w-[100%] rounded-xl border border-gray-300 outline-none p-3' />
+                        {errMsg?.name &&
+                        <p className='text-red-600 text-sm'>{errMsg?.name}</p>}
                     </div>
                     {/*  */}
                     <div className='w-[100%] mb-6'>
                         <p className='mb-2 leading-none text-sm font-semibold'>Level:</p>
                         <select
                             name='level'
+                            onChange={handleInput}
                             className='w-[100%] rounded-xl border border-gray-300 outline-none p-3'>
                             <option value="">Select an option</option>
-                            <option value={1}>1</option>
-                            <option value={2}>2</option>
+                            <option value={1} selected={data?.level == 1 && 'selected'}>1</option>
+                            <option value={2} selected={data?.level == 2 && 'selected'}>2</option>
+                            <option value={3} selected={data?.level == 3 && 'selected'}>3</option>
+                            <option value={4} selected={data?.level == 4 && 'selected'}>4</option>
                         </select>
+                        {errMsg?.level &&
+                        <p className='text-red-600 text-sm'>{errMsg?.level}</p>}
                     </div>
                     
-                   
-                   
-                    
-                  
-                   
-                    
-                    
-
-                    <div className='w-[100%] mb-6'>
+                    <div className='w-[100%]'>
                         <button type='submit' className='w-[100%] rounded-xl bg-gray-800 hover:bg-gray-900 hover:drop-shadow-lg ease-linear transition-all duration-150 text-white py-4'>
-                            Submit
+                           { isSubmit 
+                           ? 'Processing' 
+                           : 'Submit' }
                         </button>
                     </div>
 

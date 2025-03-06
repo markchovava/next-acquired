@@ -1,4 +1,5 @@
 "use client";
+import { _userStoreAction } from '@/actions/UserActions';
 import { AnimatePresence, motion } from 'framer-motion';
 import React, { useState } from 'react'
 import { IoClose } from 'react-icons/io5';
@@ -15,9 +16,48 @@ const variants = {
 
 export default function UserAddModal({isModal, setIsModal}) {
     const [data, setData] = useState({})
-    const handleInput = (e) => {
-        setInputData({...inputData, [e.target.name]: e.target.value});
-    }
+        const [errMsg, setErrMsg] = useState({})
+        const [isSubmit, setIsSubmit] = useState(false)
+        const handleInput = (e) => {
+            setData({...data, [e.target.name]: e.target.value});
+        }
+    
+        async function postData() {
+            if(!data?.name){
+                const message = "Name is required."
+                toast.warn(message, reactToastifyDark)
+                setErrMsg({name: message})
+                setIsSubmit(false)
+                return
+            }
+            if(!data?.level){
+                const message = "Level is required."
+                toast.warn(level, reactToastifyDark)
+                setErrMsg({name: message})
+                setIsSubmit(false)
+                return
+            }
+            const formData = {
+                name: data?.name,
+                level: data?.level,
+            }
+            try{
+                const res = await _userStoreAction(formData);
+                if(res.status == 1) {
+                    await getData();
+                    toast.success(res.message, reactToastifyDark);
+                    setData({});
+                    setErrMsg({});
+                    setIsSubmit(false)
+                    setIsModal(false);
+                    return;
+                }
+                } catch (error) {
+                    console.error(`Error: ${error}`);
+                    setIsSubmit(false)
+                    return;
+            }
+        }
   return (
     <>
     <AnimatePresence>
@@ -46,7 +86,9 @@ export default function UserAddModal({isModal, setIsModal}) {
                             <p className='mb-2 leading-none text-sm font-semibold'>First Name:</p>
                             <input 
                                 type='text' 
-                                name='name'
+                                name='fname'
+                                value={data?.fname}
+                                onChange={handleInput}
                                 placeholder='Name' 
                                 className='w-[100%] rounded-xl border border-gray-300 outline-none p-3' />
                         </div>
@@ -55,10 +97,23 @@ export default function UserAddModal({isModal, setIsModal}) {
                             <p className='mb-2 leading-none text-sm font-semibold'>Last Name:</p>
                             <input 
                                 type='text' 
-                                name='name'
+                                name='lname'
+                                value={data?.lname}
+                                onChange={handleInput}
                                 placeholder='Last Name' 
                                 className='w-[100%] rounded-xl border border-gray-300 outline-none p-3' />
                         </div>
+                    </div>
+                    {/* ADDRESS */}
+                    <div className='w-[100%] mb-6'>
+                        <p className='mb-2 leading-none text-sm font-semibold'>Phone:</p>
+                        <input 
+                            type='text' 
+                            name='phone'
+                            value={data?.phone}
+                            onChange={handleInput}
+                            placeholder='Phone' 
+                            className='w-[100%] rounded-xl border border-gray-300 outline-none p-3' />
                     </div>
                     {/* ADDRESS */}
                     <div className='w-[100%] mb-6'>
@@ -66,6 +121,8 @@ export default function UserAddModal({isModal, setIsModal}) {
                         <input 
                             type='text' 
                             name='address'
+                            value={data?.address}
+                            onChange={handleInput}
                             placeholder='Address' 
                             className='w-[100%] rounded-xl border border-gray-300 outline-none p-3' />
                     </div>
@@ -75,6 +132,8 @@ export default function UserAddModal({isModal, setIsModal}) {
                         <input 
                             type='text' 
                             name='linkedin'
+                            value={data?.linkedin}
+                            onChange={handleInput}
                             placeholder='LinkedIn' 
                             className='w-[100%] rounded-xl border border-gray-300 outline-none p-3' />
                     </div>
@@ -84,6 +143,8 @@ export default function UserAddModal({isModal, setIsModal}) {
                         <textarea 
                             type='text' 
                             name='skillset'
+                            value={data?.skillset}
+                            onChange={handleInput}
                             placeholder='Skillset' 
                             className='w-[100%] h-[8rem] rounded-xl border border-gray-300 outline-none p-3'></textarea>
                     </div>
@@ -92,7 +153,9 @@ export default function UserAddModal({isModal, setIsModal}) {
                         <p className='mb-2 leading-none text-sm font-semibold'>Asquisition Target:</p>
                         <textarea 
                             type='text' 
-                            name='asquisition_target'
+                            name='asquisition'
+                            value={data?.asquisition}
+                            onChange={handleInput}
                             placeholder='Asquisition Target' 
                             className='w-[100%] h-[8rem] rounded-xl border border-gray-300 outline-none p-3'></textarea>
                     </div>
@@ -102,13 +165,15 @@ export default function UserAddModal({isModal, setIsModal}) {
                         <textarea 
                             type='text' 
                             name='bio'
+                            value={data?.bio}
+                            onChange={handleInput}
                             placeholder='About Me' 
                             className='w-[100%] h-[8rem] rounded-xl border border-gray-300 outline-none p-3'></textarea>
                     </div>
 
                     <div className='w-[100%] mb-6'>
                         <button type='submit' className='w-[100%] rounded-xl bg-gray-800 hover:bg-gray-900 hover:drop-shadow-lg ease-linear transition-all duration-150 text-white py-4'>
-                            Submit
+                            {isSubmit ? 'Processing' : 'Submit'}
                         </button>
                     </div>
 

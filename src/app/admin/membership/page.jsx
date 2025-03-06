@@ -2,9 +2,11 @@ import Link from 'next/link'
 import React from 'react'
 import { FaAngleRight } from 'react-icons/fa6'
 import MembershipList from './_components/MembershipList'
+import { _membershipListAction } from '@/actions/MembershipActions'
 
 
-export default function page() {
+export default async function page() {
+  const [membershipData, ] = await Promise.all([_membershipListAction(), ])
   return (
     <>
     <section className='w-[100%]'>
@@ -29,7 +31,7 @@ export default function page() {
         </div>
     </section>
 
-    <MembershipList />
+    <MembershipList dbData={membershipData} />
     </>
   )
 }

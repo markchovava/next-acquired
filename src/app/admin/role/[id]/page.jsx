@@ -2,11 +2,15 @@ import Link from 'next/link'
 import React from 'react'
 import { FaAngleRight } from 'react-icons/fa6'
 import RoleView from './_components/RoleView'
+import { _roleViewAction } from '@/actions/RoleActions'
 
 
 
 
-export default function page() {
+export default async function page({params: { id } }) {
+  const [roleData, ] = await Promise.all([_roleViewAction(id), ])
+
+
   return (
     <>
      <section className='w-[100%]'>
@@ -19,8 +23,7 @@ export default function page() {
           <li><FaAngleRight /></li>
           <li><Link href="/admin/role">Role List</Link></li>
           <li><FaAngleRight /></li>
-          <li><Link href="/admin/role/1" className='font-bold '>Role</Link></li>
-
+          <li><Link href={`/admin/role/${id}`} className='font-bold '>Role</Link></li>
         </ul>
       </div>
      </section>
@@ -34,7 +37,7 @@ export default function page() {
     </section>
 
 
-    <RoleView />
+    <RoleView id={id} dbData={roleData} />
 
 
 

@@ -1,7 +1,10 @@
 "use client";
+import { _appInfoStoreAction } from '@/actions/AppInfoActions';
+import { reactToastifyDark } from '@/utils/reactToastify';
 import { AnimatePresence, motion } from 'framer-motion';
 import React, { useState } from 'react'
 import { IoClose } from 'react-icons/io5';
+import { toast } from 'react-toastify';
 
 
 const variants = {
@@ -13,11 +16,80 @@ const variants = {
 }
 
 
-export default function AppInfoEditModal({isModal, setIsModal}) {
-    const [data, setData] = useState({})
+export default function AppInfoEditModal({domData, isModal, setIsModal, getData}) {
+    const [data, setData] = useState(domData)
+    const [errMsg, setErrMsg] = useState({})
+    const [isSubmit, setIsSubmit] = useState(false);
     const handleInput = (e) => {
-        setInputData({...inputData, [e.target.name]: e.target.value});
+        setData({...data, [e.target.name]: e.target.value});
     }
+
+    async function postData(){
+        if(!data?.name){
+            const message = 'Name is required.'
+            setErrMsg({name: message})
+            toast.warn(message, reactToastifyDark)
+            setIsSubmit(false);
+            return
+        }
+        if(!data?.phone){
+            const message = 'Phone is required.'
+            setErrMsg({phone: message})
+            toast.warn(message, reactToastifyDark)
+            setIsSubmit(false);
+            return
+        }
+        if(!data?.email){
+            const message = 'Email is required.'
+            setErrMsg({email: message})
+            toast.warn(message, reactToastifyDark)
+            setIsSubmit(false);
+            return
+        }
+        if(!data?.website){
+            const message = 'Website is required.'
+            setErrMsg({website: message})
+            toast.warn(message, reactToastifyDark)
+            setIsSubmit(false);
+            return
+        }
+        
+        const formData = {
+            name: data?.name,
+            phone: data?.phone,
+            address: data?.address,
+            email: data?.email,
+            linkedin: data?.linkedin,
+            facebook: data?.facebook,
+            whatsapp: data?.whatsapp,
+            website: data?.website,
+            twitter: data?.twitter,
+            description: data?.description,
+        }
+
+        try{
+            const res = await _appInfoStoreAction(formData)
+            console.log('res', res)
+            if(res.status == 1) {
+                toast.success(res?.message, reactToastifyDark);
+                setIsSubmit(false);
+                setErrMsg({});
+                setData({})
+                await getData()
+                setIsModal(false)
+                setIsSubmit(false);
+                return
+            }
+            toast.warn("Something went wrong, try again.", reactToastifyDark);
+            setIsSubmit(false);
+            return;
+        } catch (error) {
+            console.error(`Error: ${error}`);
+            setIsSubmit(false); 
+        }
+
+    }
+
   return (
     <>
     <AnimatePresence>
@@ -36,18 +108,22 @@ export default function AppInfoEditModal({isModal, setIsModal}) {
                     <IoClose className='text-2xl' />
                 </button>
                 </div>
-                <form>
+                <form action={postData} onSubmit={() => setIsSubmit(true)}>
                    <h2 className='font-serif text-[2.6rem] mb-6 text-center border-b border-gray-300'>
                     Edit App Information
                     </h2>
-                    {/*  */}
+                    {/* Name */}
                     <div className='w-[100%] mb-6'>
                         <p className='mb-2 leading-none text-sm font-semibold'>Name:</p>
                         <input 
                             type='text' 
                             name='name'
+                            value={data?.name}
+                            onChange={handleInput}
                             placeholder='Name' 
                             className='w-[100%] rounded-xl border border-gray-300 outline-none p-3' />
+                        {errMsg.name && 
+                        <p className='text-red-600 text-sm'>{errMsg.name}</p>}
                     </div>
                     {/*  */}
                     <div className='w-[100%] mb-6'>
@@ -55,8 +131,12 @@ export default function AppInfoEditModal({isModal, setIsModal}) {
                         <input 
                             type='text' 
                             name='phone'
+                            value={data?.phone}
+                            onChange={handleInput}  
                             placeholder='Phone Number' 
                             className='w-[100%] rounded-xl border border-gray-300 outline-none p-3' />
+                         {errMsg?.phone && 
+                        <p className='text-red-600 text-sm'>{errMsg?.phone}</p>}
                     </div>
                     {/*  */}
                     <div className='w-[100%] mb-6'>
@@ -64,6 +144,8 @@ export default function AppInfoEditModal({isModal, setIsModal}) {
                         <input 
                             type='text' 
                             name='address'
+                            value={data?.address}
+                            onChange={handleInput}  
                             placeholder='Address' 
                             className='w-[100%] rounded-xl border border-gray-300 outline-none p-3' />
                     </div>
@@ -73,8 +155,12 @@ export default function AppInfoEditModal({isModal, setIsModal}) {
                         <input 
                             type='text' 
                             name='email'
+                            value={data?.email}
+                            onChange={handleInput}  
                             placeholder='Email' 
                             className='w-[100%] rounded-xl border border-gray-300 outline-none p-3' />
+                         {errMsg?.email && 
+                        <p className='text-red-600 text-sm'>{errMsg.email}</p>}
                     </div>
                     {/*  */}
                     <div className='w-[100%] mb-6'>
@@ -82,17 +168,12 @@ export default function AppInfoEditModal({isModal, setIsModal}) {
                         <input 
                             type='text' 
                             name='website'
+                            value={data?.website}
+                            onChange={handleInput}  
                             placeholder='Website' 
                             className='w-[100%] rounded-xl border border-gray-300 outline-none p-3' />
-                    </div>
-                    {/*  */}
-                    <div className='w-[100%] mb-6'>
-                        <p className='mb-2 leading-none text-sm font-semibold'>LinkedIn:</p>
-                        <input 
-                            type='text' 
-                            name='linkedin'
-                            placeholder='LinkedIn' 
-                            className='w-[100%] rounded-xl border border-gray-300 outline-none p-3' />
+                         {errMsg?.website && 
+                        <p className='text-red-600 text-sm'>{errMsg?.website}</p>}
                     </div>
                     {/*  */}
                     <div className='w-[100%] mb-6'>
@@ -100,6 +181,8 @@ export default function AppInfoEditModal({isModal, setIsModal}) {
                         <input 
                             type='text' 
                             name='facebook'
+                            value={data?.facebook}
+                            onChange={handleInput}  
                             placeholder='Facebook' 
                             className='w-[100%] rounded-xl border border-gray-300 outline-none p-3' />
                     </div>
@@ -109,6 +192,8 @@ export default function AppInfoEditModal({isModal, setIsModal}) {
                         <input 
                             type='text' 
                             name='whatsapp'
+                            value={data?.whatsapp}
+                            onChange={handleInput}  
                             placeholder='WhatsApp' 
                             className='w-[100%] rounded-xl border border-gray-300 outline-none p-3' />
                     </div>
@@ -118,6 +203,8 @@ export default function AppInfoEditModal({isModal, setIsModal}) {
                         <input 
                             type='text' 
                             name='twitter'
+                            value={data?.twitter}
+                            onChange={handleInput}  
                             placeholder='Twitter' 
                             className='w-[100%] rounded-xl border border-gray-300 outline-none p-3' />
                     </div>
@@ -126,7 +213,9 @@ export default function AppInfoEditModal({isModal, setIsModal}) {
                     {/* About Me */}
                     <div className='w-[100%] mb-6'>
                         <p className='mb-2 leading-none text-sm font-semibold'>Description:</p>
-                        <textarea  
+                        <textarea
+                            value={data?.description}
+                            onChange={handleInput}  
                             name='description'
                             placeholder='Description' 
                             className='w-[100%] h-[8rem] rounded-xl border border-gray-300 outline-none p-3'></textarea>
@@ -134,7 +223,7 @@ export default function AppInfoEditModal({isModal, setIsModal}) {
 
                     <div className='w-[100%] mb-6'>
                         <button type='submit' className='w-[100%] rounded-xl bg-gray-800 hover:bg-gray-900 hover:drop-shadow-lg ease-linear transition-all duration-150 text-white py-4'>
-                            Submit
+                            {isSubmit ?'Processing' : 'Submit'}
                         </button>
                     </div>
 

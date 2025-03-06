@@ -2,9 +2,13 @@ import Link from 'next/link'
 import React from 'react'
 import { FaAngleRight } from 'react-icons/fa6'
 import UserList from './_components/UserList'
+import { _userListAction } from '@/actions/UserActions'
 
 
-export default function page() {
+
+export default async function page() {
+  const [ usersData ] = await Promise.all([_userListAction(), ]);
+
   return (
     <>
     <section className='w-[100%]'>
@@ -29,7 +33,7 @@ export default function page() {
         </div>
     </section>
 
-    <UserList />
+    <UserList dbData={usersData} />
     </>
   )
 }

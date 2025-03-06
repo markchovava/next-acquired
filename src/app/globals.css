@@ -23,7 +23,7 @@
     @apply underline;
   }
   .article b, .article strong{
-    @apply font-semibold;
+    @apply font-bold;
   }
   .article strong{
     @apply font-medium;

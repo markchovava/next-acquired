@@ -5,6 +5,11 @@ import { IoClose } from 'react-icons/io5';
 import { IoMdAddCircleOutline } from "react-icons/io";
 import { MdDeleteForever } from "react-icons/md";
 import generateUniqueId from '@/utils/generateUniqueId';
+import { _businessUpdateAction } from '@/actions/BusinessActions';
+import { toast } from 'react-toastify';
+import { reactToastifyDark } from '@/utils/reactToastify';
+import RichTextEditor from '@/app/_components/RichTextEditor';
+import { baseURL } from '@/apis/BaseURL';
 
 
 
@@ -17,9 +22,25 @@ const variants = {
 }
 
 
-export default function BusinessAddModal({isModal, setIsModal}) {
-    const [data, setData] = useState({})
-    const [dList, setDList] = useState([]);
+
+export default function BusinessEditModal({id, domData, getData, cities, provinces, isModal, setIsModal}) {
+    const [data, setData] = useState({
+        name: domData?.name,
+        phone: domData?.phone,
+        email: domData?.email,
+        address: domData?.address,
+        city_id: domData?.city_id,
+        province_id: domData?.province_id,
+        province: domData?.province_id,
+        price: domData?.price,
+        image: domData?.image,
+        img: baseURL + domData?.image,
+    });
+    const [errMsg, setErrMsg] = useState({});
+    const [description ,setDescription] = useState(domData?.description)
+    const [isSubmit, setIsSubmit] = useState(false)
+
+    const [dList, setDList] = useState(domData?.business_details);
     const handleInput = (e) => {
         setData({...data, [e.target.name]: e.target.value});
     }
@@ -32,7 +53,6 @@ export default function BusinessAddModal({isModal, setIsModal}) {
                 value: data.detail_value,
             }
             setDList([ obj, ...dList])
-            //setData({...data, detail_name: "", detail_value: "" })
             console.log("obj :: ", obj)
         }
         return
@@ -42,9 +62,71 @@ export default function BusinessAddModal({isModal, setIsModal}) {
         setDList((prevItems) => prevItems.filter((item) => item.id !== itemId));
     }
 
-
-    console.log("dList::: ", dList)
-    console.log("data::: ", data)
+    async function postData() {
+        if(!data?.name){
+            const message = "Name is required."
+            toast.warn(message, reactToastifyDark)
+            setErrMsg({name: message})
+            setIsSubmit(false)
+            return
+        }
+        if(!data?.phone){
+            const message = "Phone is required."
+            toast.warn(message, reactToastifyDark)
+            setErrMsg({phone: message})
+            setIsSubmit(false)
+            return
+        }
+        if(!data?.email){
+            const message = "Email is required."
+            toast.warn(message, reactToastifyDark)
+            setErrMsg({email: message})
+            setIsSubmit(false)
+            return
+        }
+        if(!data?.price){
+            const message = "Price is required."
+            toast.warn(message, reactToastifyDark)
+            setErrMsg({price: message})
+            setIsSubmit(false)
+            return
+        }
+        if(!description){
+            const message = "Description is required."
+            toast.warn(message, reactToastifyDark)
+            setErrMsg({description: message})
+            setIsSubmit(false)
+            return
+        }
+        const formData = new FormData();
+        formData.append('image', data?.image)
+        formData.append('name', data?.name)
+        formData.append('phone', data?.phone)
+        formData.append('email', data?.email)
+        formData.append('address', data?.address)
+        formData.append('description', description)
+        formData.append('price', data?.price)
+        formData.append('province_id', data?.province_id)
+        formData.append('city_id', data?.city_id)
+        formData.append('business_details', JSON.stringify(dList))
+        // const formDataObj = Object.fromEntries(formData.entries());
+        // console.log('FormData as object:', formDataObj);
+        try{
+            const res = await _businessUpdateAction(formData, id);
+             if(res?.status == 1) {
+                await getData();
+                toast.success(res?.message, reactToastifyDark);
+                setErrMsg({});
+                setIsSubmit(false)
+                setIsModal(false);
+                return;
+            }
+            } catch (error) {
+                console.error(`Error: ${error}`);
+                setIsSubmit(false)
+                return;
+        }
+    }
 
 
   return (
@@ -65,7 +147,7 @@ export default function BusinessAddModal({isModal, setIsModal}) {
                     <IoClose className='text-2xl' />
                 </button>
                 </div>
-                <form onSubmit={(e) => e.preventDefault() }>
+                <form action={postData} onSubmit={() => setIsSubmit(true) }>
                    <h2 className='font-serif text-[2.6rem] mb-6 text-center border-b border-gray-300'>
                     Edit Business
                     </h2>
@@ -85,62 +167,111 @@ export default function BusinessAddModal({isModal, setIsModal}) {
                             <img src={data.img} className='absolute z-10 w-[100%] h-[100%] object-cover' />
                         </div>
                     </div>
-                    {/*  */}
+                    {/* NAME */}
                     <div className='w-[100%] mb-6'>
                         <p className='mb-2 leading-none text-sm font-semibold'>Name:</p>
                         <input 
                             type='text' 
                             name='name'
+                            value={data?.name}
+                            onChange={handleInput}
                             placeholder='Name' 
                             className='w-[100%] rounded-xl border border-gray-300 outline-none p-3' />
                     </div>
-                    {/*  */}
+                    {/* PHONE */}
+                    <div className='w-[100%] mb-6'>
+                        <p className='mb-2 leading-none text-sm font-semibold'>Phone Number:</p>
+                        <input 
+                            type='text' 
+                            name='phone'
+                            value={data?.phone}
+                            onChange={handleInput}
+                            placeholder='Phone' 
+                            className='w-[100%] rounded-xl border border-gray-300 outline-none p-3' />
+                    </div>
+                    {/* EMAIL */}
+                    <div className='w-[100%] mb-6'>
+                        <p className='mb-2 leading-none text-sm font-semibold'>Email:</p>
+                        <input 
+                            type='text' 
+                            name='email'
+                            value={data?.email}
+                            onChange={handleInput}
+                            placeholder='Email' 
+                            className='w-[100%] rounded-xl border border-gray-300 outline-none p-3' />
+                    </div>
+                    {/* ADDRRESS */}
                     <div className='w-[100%] mb-6'>
                         <p className='mb-2 leading-none text-sm font-semibold'>Address:</p>
                         <input 
                             type='text' 
                             name='address'
+                            value={data?.address}
+                            onChange={handleInput}
                             placeholder='Address' 
                             className='w-[100%] rounded-xl border border-gray-300 outline-none p-3' />
                     </div>
-                    {/*  */}
+                    
+                    {/* PROVINCE */}
+                    { provinces &&
                     <div className='w-[100%] mb-6'>
                         <p className='mb-2 leading-none text-sm font-semibold'>Province:</p>
                         <select  
-                            name='address'
+                            name='province_id'
+                            onChange={handleInput}
                             className='w-[100%] rounded-xl border border-gray-300 outline-none p-3'>
                             <option value="">Select an option</option>
-                            <option value="Harare">Harare</option>
-                            <option value="Bulawayo">Harare</option>
+                            {provinces.map((i, key) => (
+                                <option 
+                                key={key} 
+                                value={i?.id} 
+                                selected={i?.id == data?.province_id && 'selected'}>
+                                    {i?.name}
+                                </option>
+                            ))}
                         </select>
                     </div>
-                    {/*  */}
+                    }
+                    {/* CITY */}
+                    { cities &&
                     <div className='w-[100%] mb-6'>
                         <p className='mb-2 leading-none text-sm font-semibold'>City:</p>
                         <select  
-                            name='city'
+                            name='city_id'
+                            onChange={handleInput}
                             className='w-[100%] rounded-xl border border-gray-300 outline-none p-3'>
                             <option value="">Select an option</option>
-                            <option value="Harare">Harare</option>
-                            <option value="Bulawayo">Harare</option>
+                            {cities?.map((i, key) => (
+                                <option
+                                key={key} 
+                                value={i?.id} 
+                                selected={i?.id == data?.city_id && 'selected'}>
+                                    {i?.name}
+                                </option>
+                            ))}
                         </select>
                     </div>
+                    }
+
                     {/*  */}
                     <div className='w-[100%] mb-6'>
                         <p className='mb-2 leading-none text-sm font-semibold'>Asking Price:</p>
                         <input 
                             type='text' 
                             name='price'
+                            onChange={handleInput}
+                            value={data?.price}
                             placeholder='Asking Price' 
                             className='w-[100%] rounded-xl border border-gray-300 outline-none p-3' />
                     </div>
                     {/*  */}
                     <div className='w-[100%] mb-6'>
                         <p className='mb-2 leading-none text-sm font-semibold'>Description:</p>
-                        <textarea 
-                            name='description'
-                            placeholder='Description' 
-                            className='w-[100%] rounded-xl border border-gray-300 outline-none p-3'></textarea>
+                        <div className='w-[100%] h-auto mb-12 overflow-hidden'>
+                            <RichTextEditor content={description} setContent={setDescription} />
+                            { errMsg?.description && 
+                            <p className='text-red-600 text-sm'>{errMsg?.description}</p> }
+                        </div>
                     </div>
                     {/* DETAILS */}
                     <div className='w-[100%] grid grid-cols-9 gap-4'>
@@ -189,13 +320,11 @@ export default function BusinessAddModal({isModal, setIsModal}) {
                     </div>
 
                     
-                    
                     <div className='w-[100%] my-8'>
                         <button
-                            onClick={ () => console.log("dList ::: ", dList) }
                             type='submit' 
                             className='w-[100%] rounded-xl bg-gray-800 hover:bg-gray-900 hover:drop-shadow-lg ease-linear transition-all duration-150 text-white py-4'>
-                            Submit
+                            { isSubmit ? 'Processing' : 'Submit'}
                         </button>
                     </div>
 

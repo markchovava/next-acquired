@@ -1,11 +1,18 @@
 "use client"
 import React, { useState } from 'react'
 import FaqEditModal from './FaqEditModal';
+import { _faqViewAction } from '@/actions/FaqActions';
 
 
 
-export default function FaqView() {
-  const [isModal, setIsModal] = useState(false);
+export default function FaqView({ dbData, id }) {
+    const [isModal, setIsModal] = useState(false);
+    const [data, setData] = useState(dbData?.data);
+  
+    async function getData(){
+      const res = await _faqViewAction(id);
+      setData(res?.data);
+    }
   
   return (
     <>
@@ -21,23 +28,31 @@ export default function FaqView() {
             {/* NAME */}
             <div className='mb-6'>
                 <p className='text-sm font-semibold'>Title:</p>
-                <p className='text-lg'>N/A</p>
+                <p className='text-lg'>{data?.title}</p>
             </div>
             {/* DESCRIPTION */}
-            <div className='mb-6'>
-                <p className='text-sm font-semibold'>Description:</p>
-                <p className='text-lg'>N/A</p>
+            <div className='mb-8'>
+                <p className='text-sm font-semibold mb-1'>Description:</p>
+                <div className='text-lg article leading-tight' 
+                    dangerouslySetInnerHTML={{ __html: data?.description }}></div>
             </div>
           
             {/* */}
             <div className='mb-6'>
                 <p className='text-sm font-semibold'>Author:</p>
-                <p className='text-lg'>N/A</p>
+                <p className='text-lg'>
+                    {data?.user?.name ? data?.user?.name : (data?.user?.email ? data?.user?.email : 'Not Added.')}
+                </p>
             </div>
         </div>
     </section>
 
-    <FaqEditModal isModal={isModal} setIsModal={setIsModal} />
+    <FaqEditModal 
+        id={id}
+        domData={data} 
+        getData={getData} 
+        isModal={isModal} 
+        setIsModal={setIsModal}  />
 
 
     </>

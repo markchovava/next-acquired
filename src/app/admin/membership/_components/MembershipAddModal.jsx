@@ -1,8 +1,12 @@
 "use client";
+import { _faqStoreAction } from '@/actions/FaqActions';
+import { _membershipStoreAction } from '@/actions/MembershipActions';
 import RichTextEditor from '@/app/_components/RichTextEditor';
+import { reactToastifyDark } from '@/utils/reactToastify';
 import { AnimatePresence, motion } from 'framer-motion';
 import React, { useState } from 'react'
 import { IoClose } from 'react-icons/io5';
+import { toast } from 'react-toastify';
 
 
 const variants = {
@@ -14,12 +18,62 @@ const variants = {
 }
 
 
-export default function MembershipAddModal({isModal, setIsModal}) {
-    const [description, setDescription] = useState("");
-    const [data, setData] = useState({})
-    const handleInput = (e) => {
-        setInputData({...inputData, [e.target.name]: e.target.value});
-    }
+export default function MembershipAddModal({getData, isModal, setIsModal}) {
+        const [data, setData] = useState({
+            name: '',
+        });
+       const [description, setDescription] = useState("");
+       const [errMsg, setErrMsg] = useState({})
+       const [isSubmit, setIsSubmit] = useState(false)
+       const handleInput = (e) => {
+           setData({...data, [e.target.name]: e.target.value});
+       }
+   
+       async function postData() {
+            if(!data?.name){
+                const message = "Name is required."
+                toast.warn(message, reactToastifyDark)
+                setErrMsg({name: message})
+                setIsSubmit(false)
+                return
+            }
+            if(!data?.fee){
+                const message = "Fee is required."
+                toast.warn(message, reactToastifyDark)
+                setErrMsg({fee: message})
+                setIsSubmit(false)
+                return
+            }
+            if(!description){
+                const message = "Description is required."
+                toast.warn(message, reactToastifyDark)
+                setErrMsg({description: message})
+                setIsSubmit(false)
+                return
+            }
+            const formData = {
+                name: data?.name,
+                fee: data?.fee,
+                description: description,
+            }
+            try{
+                const res = await _membershipStoreAction(formData);
+                if(res.status == 1) {
+                    await getData();
+                    toast.success(res.message, reactToastifyDark);
+                    setData({});
+                    setDescription('');
+                    setErrMsg({});
+                    setIsSubmit(false)
+                    setIsModal(false);
+                    return;
+                }
+                } catch (error) {
+                    console.error(`Error: ${error}`);
+                    setIsSubmit(false)
+                    return;
+            }
+       }
   return (
     <>
     <AnimatePresence>
@@ -38,7 +92,7 @@ export default function MembershipAddModal({isModal, setIsModal}) {
                     <IoClose className='text-2xl' />
                 </button>
                 </div>
-                <form>
+                <form action={postData} onSubmit={() => setIsSubmit(true)}>
                    <h2 className='font-serif text-[2.6rem] mb-6 text-center border-b border-gray-300'>
                     Add Membership
                     </h2>
@@ -48,21 +102,41 @@ export default function MembershipAddModal({isModal, setIsModal}) {
                         <input 
                             type='text' 
                             name='name'
+                            onChange={handleInput}
+                            value={data?.name}
                             placeholder='Name' 
                             className='w-[100%] rounded-xl border border-gray-300 outline-none p-3' />
+                        { errMsg?.name && 
+                            <p className='text-red-600 text-sm'>{errMsg?.name}</p> }
                     </div>
+                   
                     {/*  */}
                     <div className='w-[100%] mb-6'>
+                        <p className='mb-2 leading-none text-sm font-semibold'>Fee:</p>
+                        <input 
+                            type='number' 
+                            name='fee'
+                            onChange={handleInput}
+                            value={data?.fee}
+                            placeholder='Fee' 
+                            className='w-[100%] rounded-xl border border-gray-300 outline-none p-3' />
+                        { errMsg?.fee && 
+                            <p className='text-red-600 text-sm'>{errMsg?.fee}</p> }
+                    </div>
+
+                     {/*  */}
+                     <div className='w-[100%] mb-6'>
                         <p className='mb-2 leading-none text-sm font-semibold'>Description:</p>
                         <div className='w-[100%] h-auto mb-12 overflow-hidden'>
                         <RichTextEditor content={description} setContent={setDescription} />
+                        { errMsg?.description && 
+                            <p className='text-red-600 text-sm'>{errMsg?.description}</p> }
                         </div>
-                    </div>
-                    
+                    </div>                    
                     
                     <div className='w-[100%] mb-6'>
                         <button type='submit' className='w-[100%] rounded-xl bg-gray-800 hover:bg-gray-900 hover:drop-shadow-lg ease-linear transition-all duration-150 text-white py-4'>
-                            Submit
+                        { isSubmit ? 'Processing' : 'Submit' }
                         </button>
                     </div>
 

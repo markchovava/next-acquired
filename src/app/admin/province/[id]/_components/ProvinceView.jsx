@@ -1,11 +1,18 @@
 "use client"
 import React, { useState } from 'react'
 import ProvinceEditModal from './ProvinceEditModal';
+import { _provinceViewAction } from '@/actions/ProvinceActions';
 
 
 
-export default function ProvinceView() {
+export default function ProvinceView({ id, dbData}) {
   const [isModal, setIsModal] = useState(false);
+      const [data, setData] = useState(dbData?.data);
+    
+      async function getData(){
+        const res = await _provinceViewAction(id);
+        setData(res?.data);
+      }
   
   return (
     <>
@@ -21,18 +28,25 @@ export default function ProvinceView() {
             {/* NAME */}
             <div className='mb-6'>
                 <p className='text-sm font-semibold'>Name:</p>
-                <p className='text-lg'>N/A</p>
+                <p className='text-lg'>{data?.name}</p>
             </div>
           
             {/* */}
             <div className='mb-6'>
                 <p className='text-sm font-semibold'>Author:</p>
-                <p className='text-lg'>N/A</p>
+                <p className='text-lg'>
+                {data?.user?.name ? data?.user?.name : (data?.user?.email ? data?.user?.email : 'Not Added.')}
+                </p>
             </div>
         </div>
     </section>
 
-    <ProvinceEditModal isModal={isModal} setIsModal={setIsModal} />
+    <ProvinceEditModal 
+        id={id}
+        domData={data} 
+        getData={getData} 
+        isModal={isModal} 
+        setIsModal={setIsModal} />
 
 
     </>

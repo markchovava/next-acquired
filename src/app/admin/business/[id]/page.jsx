@@ -2,11 +2,20 @@ import Link from 'next/link'
 import React from 'react'
 import { FaAngleRight } from 'react-icons/fa6'
 import BusinessView from './_components/BusinessView'
+import { _businessViewAction } from '@/actions/BusinessActions'
+import { _cityListAllAction } from '@/actions/CityActions'
+import { _provinceListAllAction } from '@/actions/ProvinceActions'
 
 
 
 
-export default function page() {
+export default async function page({ params: {id} }) {
+  const [businessData, citiesData, provincesData, ] = await Promise.all([
+                                                        _businessViewAction(id), 
+                                                        _cityListAllAction(), 
+                                                        _provinceListAllAction(),
+                                                      ])
+
   return (
     <>
      <section className='w-[100%]'>
@@ -19,7 +28,7 @@ export default function page() {
           <li><FaAngleRight /></li>
           <li><Link href="/admin/business">Business List</Link></li>
           <li><FaAngleRight /></li>
-          <li><Link href="/admin/business/1" className='font-bold '>Business</Link></li>
+          <li><Link href={`/admin/business/${id}`} className='font-bold '>Business</Link></li>
 
         </ul>
       </div>
@@ -34,7 +43,12 @@ export default function page() {
     </section>
 
 
-    <BusinessView />
+    <BusinessView 
+      id={id}
+      dbData={businessData} 
+      citiesData={citiesData} 
+      provincesData={provincesData}
+    />
 
 
 

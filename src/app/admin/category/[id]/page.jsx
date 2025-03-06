@@ -2,11 +2,14 @@ import Link from 'next/link'
 import React from 'react'
 import { FaAngleRight } from 'react-icons/fa6'
 import CategoryView from './_components/CategoryView'
+import { _categoryViewAction } from '@/actions/CategoryActions'
 
 
 
 
-export default function page() {
+export default async function page({ params: { id } }) {
+  const [categoryData, ] = await Promise.all([_categoryViewAction(id), ])
+
   return (
     <>
      <section className='w-[100%]'>
@@ -19,7 +22,7 @@ export default function page() {
           <li><FaAngleRight /></li>
           <li><Link href="/admin/category">Category List</Link></li>
           <li><FaAngleRight /></li>
-          <li><Link href="/admin/category/1" className='font-bold '>Category</Link></li>
+          <li><Link href={`/admin/category/${id}`} className='font-bold '>Category</Link></li>
 
         </ul>
       </div>
@@ -34,7 +37,10 @@ export default function page() {
     </section>
 
 
-    <CategoryView />
+    <CategoryView 
+      id={id} 
+      dbData={categoryData} 
+    />
 
 
 
