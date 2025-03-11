@@ -5,6 +5,90 @@ import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 
 
+
+export async function businessListAction() {
+  const res = await fetch(`${baseURL}business`, {
+    'method': 'GET',
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+    }
+  });
+  return await res.json();
+}
+
+export async function businessSortListAction(sort) {
+  const res = await fetch(`${baseURL}business-sort/${sort}`, {
+    'method': 'GET',
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+    }
+  });
+  return await res.json();
+}
+
+export async function businessPaginateAction(url) {
+const res = await fetch(url, {
+  'method': 'GET',
+  headers: {
+    'Accept': 'application/json',
+    'Content-Type': 'application/json',
+  }
+});
+return await res.json();
+}
+
+export async function businessListAllAction() {
+  const res = await fetch(`${baseURL}business-all`, {
+    'method': 'GET',
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+    }
+  });
+  return await res.json();
+}
+
+export async function businessSearchCityCategoryAction(city_id, category_id, search) {
+  const url = `${baseURL}business-search-city-category?city_id=${city_id}&category_id=${category_id}&search=${search}`
+  console.log('url', url)
+  const res = await fetch(url, {
+    'method': 'GET',
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+    }
+  });
+  return await res.json();
+}
+
+export async function businessSearchAction(search) {
+  const res = await fetch(`${baseURL}business-search/${search}`, {
+    'method': 'GET',
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+    }
+  });
+  return await res.json();
+}
+
+export async function businessViewAction(id) {
+  const res = await fetch(`${baseURL}business/${id}`, {
+    'method': 'GET',
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+    }
+  });
+  return await res.json();
+}
+
+
+
+/* --------------------------------------------- */
+
 export async function _businessListAction() {
     const cookieStore = await cookies();
     const authToken = await cookieStore.get('ACQUIREDZW_AUTH_COOKIE');

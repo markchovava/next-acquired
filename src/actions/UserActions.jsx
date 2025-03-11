@@ -107,7 +107,7 @@ export async function _userUpdateAction(data, id) {
     const cookieStore = await cookies();
     const authToken = await cookieStore.get('ACQUIREDZW_AUTH_COOKIE');
     if(!authToken?.value){ redirect('/login'); }
-    const res = await fetch(`${baseURL}api//${id}`, {
+    const res = await fetch(`${baseURL}api/user/${id}`, {
       'method': 'POST',
       'body': JSON.stringify(data),
       headers: {

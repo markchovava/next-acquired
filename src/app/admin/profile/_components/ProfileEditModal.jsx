@@ -1,7 +1,10 @@
 "use client";
+import { _profileUpdateAction } from '@/actions/AuthActions';
+import { reactToastifyDark } from '@/utils/reactToastify';
 import { AnimatePresence, motion } from 'framer-motion';
 import React, { useState } from 'react'
 import { IoClose } from 'react-icons/io5';
+import { toast } from 'react-toastify';
 
 
 const variants = {
@@ -13,11 +16,72 @@ const variants = {
 }
 
 
-export default function ProfileEditModal({isModal, setIsModal}) {
-    const [data, setData] = useState({})
-    const handleInput = (e) => {
-        setInputData({...inputData, [e.target.name]: e.target.value});
-    }
+export default function ProfileEditModal({isModal, getData, setIsModal, domData, }) {
+    const [data, setData] = useState({
+            name: domData?.name,
+            email: domData?.email,
+            phone: domData?.phone,
+            linkedin: domData?.linkedin,
+            address: domData?.address,
+            bio: domData?.bio,
+            skillset: domData?.skillset,
+            asquisition: domData?.asquisition,
+        });
+        const [errMsg, setErrMsg] = useState({})
+        const [isSubmit, setIsSubmit] = useState(false)
+        const handleInput = (e) => {
+            setData({...data, [e.target.name]: e.target.value});
+        }
+        
+        async function postData() {
+                if(!data?.name){
+                    const message = "Full Name is required."
+                    toast.warn(message, reactToastifyDark)
+                    setErrMsg({name: message})
+                    setIsSubmit(false)
+                    return
+                }
+                if(!data?.email){
+                    const message = "Email is required."
+                    toast.warn(email, reactToastifyDark)
+                    setErrMsg({email: message})
+                    setIsSubmit(false)
+                    return
+                }      
+                const formData = {
+                    name: data?.name,
+                    email: data?.email,
+                    phone: data?.phone,
+                    linkedin: data?.linkedin,
+                    address: data?.address,
+                    bio: data?.bio,
+                    skillset: data?.skillset,
+                    asquisition: data?.asquisition,
+                }
+                try{
+                    const res = await _profileUpdateAction(formData);
+                    console.log('res', res)
+                    if(res?.status == 0){
+                        const message = res?.message;
+                        toast.success(message, reactToastifyDark);
+                        setErrMsg({email: message});
+                        setIsSubmit(false);
+                        return;
+                    }
+                    if(res?.status == 1) {
+                        await getData();
+                        toast.success(res?.message, reactToastifyDark);
+                        setErrMsg({});
+                        setIsSubmit(false)
+                        setIsModal(false);
+                        return;
+                    }
+                } catch (error) {
+                    console.error(`Error: ${error}`);
+                    setIsSubmit(false)
+                    return;
+                }
+        }
   return (
     <>
     <AnimatePresence>
@@ -36,29 +100,47 @@ export default function ProfileEditModal({isModal, setIsModal}) {
                     <IoClose className='text-2xl' />
                 </button>
                 </div>
-                <form>
+                <form action={postData} onSubmit={() => setIsSubmit(true)}>
                     <h2 className='font-serif text-[2.6rem] mb-6 text-center border-b border-gray-300'>
                     Edit Profile
                     </h2>
-                    <div className='flex items-center justify-start gap-3'>
-                        {/*  */}
-                        <div className='w-[100%] mb-6'>
-                            <p className='mb-2 leading-none text-sm font-semibold'>First Name:</p>
-                            <input 
-                                type='text' 
-                                name='name'
-                                placeholder='Name' 
-                                className='w-[100%] rounded-xl border border-gray-300 outline-none p-3' />
-                        </div>
-                        {/*  */}
-                        <div className='w-[100%] mb-6'>
-                            <p className='mb-2 leading-none text-sm font-semibold'>Last Name:</p>
-                            <input 
-                                type='text' 
-                                name='name'
-                                placeholder='Last Name' 
-                                className='w-[100%] rounded-xl border border-gray-300 outline-none p-3' />
-                        </div>
+                    {/* FULL NAME */}
+                    <div className='w-[100%] mb-6'>
+                        <p className='mb-2 leading-none text-sm font-semibold'>Full Name:</p>
+                        <input 
+                            type='text' 
+                            name='name'
+                            value={data?.name}
+                            onChange={handleInput}
+                            placeholder='Full Name' 
+                            className='w-[100%] rounded-xl border border-gray-300 outline-none p-3' />
+                        {errMsg?.name &&
+                            <p className='text-red-500 text-sm'>{errMsg?.name}</p>}
+                    </div>
+                   
+                    {/* EMAIL */}
+                    <div className='w-[100%] mb-6'>
+                        <p className='mb-2 leading-none text-sm font-semibold'>Email:</p>
+                        <input 
+                            type='text' 
+                            name='email'
+                            value={data?.email}
+                            onChange={handleInput}
+                            placeholder='Email' 
+                            className='w-[100%] rounded-xl border border-gray-300 outline-none p-3' />
+                        {errMsg?.email &&
+                            <p className='text-red-500 text-sm'>{errMsg?.email}</p>}    
+                    </div>
+                    {/* PHONE */}
+                    <div className='w-[100%] mb-6'>
+                        <p className='mb-2 leading-none text-sm font-semibold'>Phone:</p>
+                        <input 
+                            type='text' 
+                            name='phone'
+                            value={data?.phone}
+                            onChange={handleInput}
+                            placeholder='Phone' 
+                            className='w-[100%] rounded-xl border border-gray-300 outline-none p-3' />
                     </div>
                     {/* ADDRESS */}
                     <div className='w-[100%] mb-6'>
@@ -66,6 +148,8 @@ export default function ProfileEditModal({isModal, setIsModal}) {
                         <input 
                             type='text' 
                             name='address'
+                            value={data?.address}
+                            onChange={handleInput}
                             placeholder='Address' 
                             className='w-[100%] rounded-xl border border-gray-300 outline-none p-3' />
                     </div>
@@ -75,6 +159,8 @@ export default function ProfileEditModal({isModal, setIsModal}) {
                         <input 
                             type='text' 
                             name='linkedin'
+                            value={data?.linkedin}
+                            onChange={handleInput}
                             placeholder='LinkedIn' 
                             className='w-[100%] rounded-xl border border-gray-300 outline-none p-3' />
                     </div>
@@ -84,6 +170,8 @@ export default function ProfileEditModal({isModal, setIsModal}) {
                         <textarea 
                             type='text' 
                             name='skillset'
+                            value={data?.skillset}
+                            onChange={handleInput}
                             placeholder='Skillset' 
                             className='w-[100%] h-[8rem] rounded-xl border border-gray-300 outline-none p-3'></textarea>
                     </div>
@@ -92,7 +180,9 @@ export default function ProfileEditModal({isModal, setIsModal}) {
                         <p className='mb-2 leading-none text-sm font-semibold'>Asquisition Target:</p>
                         <textarea 
                             type='text' 
-                            name='asquisition_target'
+                            name='asquisition'
+                            value={data?.asquisition}
+                            onChange={handleInput}
                             placeholder='Asquisition Target' 
                             className='w-[100%] h-[8rem] rounded-xl border border-gray-300 outline-none p-3'></textarea>
                     </div>
@@ -102,13 +192,19 @@ export default function ProfileEditModal({isModal, setIsModal}) {
                         <textarea 
                             type='text' 
                             name='bio'
+                            value={data?.bio}
+                            onChange={handleInput}
                             placeholder='About Me' 
                             className='w-[100%] h-[8rem] rounded-xl border border-gray-300 outline-none p-3'></textarea>
                     </div>
 
                     <div className='w-[100%] mb-6'>
-                        <button type='submit' className='w-[100%] rounded-xl bg-gray-800 hover:bg-gray-900 hover:drop-shadow-lg ease-linear transition-all duration-150 text-white py-4'>
-                            Submit
+                        <button 
+                        type='submit' 
+                        className='w-[100%] rounded-xl bg-gray-800 hover:bg-gray-900 hover:drop-shadow-lg ease-linear transition-all duration-150 text-white py-4'>
+                            { isSubmit ? 
+                            'Processing' : 
+                            'Submit' }
                         </button>
                     </div>
 

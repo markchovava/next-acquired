@@ -1,9 +1,19 @@
 import Link from 'next/link'
 import React from 'react'
 import { FaAngleRight } from 'react-icons/fa6'
-import CategoryEdit from './components/CategoryEdit'
+import BusinessCategoryEdit from './components/BusinessCategoryEdit'
+import { _businessViewAction } from '@/actions/BusinessActions'
+import { _categoryListAllAction } from '@/actions/CategoryActions'
+import { _businessCategoryByBusinessAction } from '@/actions/BusinessCategoryActions'
 
-export default function page({params: {id} }) {
+
+
+export default async function page({ params: {id} }) {
+  const [businessData, categoriesData, businessCategoryData] = await Promise.all([
+    _businessViewAction(id), 
+    _categoryListAllAction(), _businessCategoryByBusinessAction(id)])
+
+
   return (
     <>
     <section className='w-[100%]'>
@@ -21,7 +31,28 @@ export default function page({params: {id} }) {
       </div>
      </section>
 
-    <CategoryEdit />
+     <section className='w-[100%] pt-[2rem]'>
+        <div className='mx-auto w-[90%]'>
+        <h1 className='font-serif text-[3rem] leading-tight border-b border-gray-300'>
+        Business Category Edit
+        </h1>
+        </div>
+    </section>
+
+    <section className='w-[100%] pt-3'>
+      <div className='w-[90%] mx-auto flex items-center justify-end'>
+        <Link href={`/admin/business/${id}`} className='duration-100 ease-linear transition-all border border-gray-800 hover:bg-gray-800 hover:text-white hover:drop-shadow-md rounded-xl px-4 py-2'>
+        View Business
+        </Link>
+      </div>
+    </section>
+
+    <BusinessCategoryEdit
+        id={id} 
+        dbData={businessData} 
+        categoriesData={categoriesData} 
+        businessCategoryData={businessCategoryData}
+    />
 
     </>
   )

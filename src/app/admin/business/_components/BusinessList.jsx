@@ -88,8 +88,6 @@ export default function BusinessList({dbData, citiesData, provincesData}) {
         }
     }
 
-
-    console.log('businessState',businessState)
     
 
   return (

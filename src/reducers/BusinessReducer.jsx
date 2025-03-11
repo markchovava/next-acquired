@@ -6,6 +6,7 @@ export const BusinessInit = (BusinessInitialState) => {
         items: null,
         prevURL: '',
         nextURL: '',
+        total: null,
     }
     return result;
 }
@@ -15,6 +16,7 @@ export const BusinessInitialState = {
     items: null,
     prevURL: '',
     nextURL: '',
+    total: null,
 };
 
 
@@ -26,6 +28,7 @@ export const BusinessReducer = (state, action) => {
                 items: action.payload.items,
                 nextURL: action.payload.nextURL,
                 prevURL: action.payload.prevURL,
+                total: action.payload.total,
 
             }    
         case 'ADD_ITEMS':

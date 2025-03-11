@@ -17,7 +17,7 @@ export default async function page() {
           <li><FaAngleRight /></li>
           <li><Link href="/admin">Dashboard</Link></li>
           <li><FaAngleRight /></li>
-          <li><Link href="/admin/role" className='font-bold '>Role List</Link></li>
+          <li><Link href="/admin/role" className='font-bold'>Role List</Link></li>
 
         </ul>
       </div>

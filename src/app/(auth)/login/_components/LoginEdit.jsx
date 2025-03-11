@@ -15,7 +15,10 @@ import { localAuth } from '@/localstorages/authLocal';
 
 export default function LoginEdit() {
     const router = useRouter();
-    const [data, setData] = useState({});
+    const [data, setData] = useState({
+        email: '',
+        password: '',
+    });
     const [isSubmit, setIsSubmit] = useState(false);
     const [errMsg, setErrMsg] = useState({});
     const { setAuthCookie } =  cookieAuthClient()

@@ -4,6 +4,7 @@ import BusinessEditModal from './BusinessEditModal';
 import { baseURL } from '@/apis/BaseURL';
 import Image from 'next/image';
 import { _businessViewAction } from '@/actions/BusinessActions';
+import Link from 'next/link';
 
 
 
@@ -22,7 +23,12 @@ export default function BusinessView({id, dbData, citiesData, provincesData}) {
     <>
     <section className='w-[100%] mt-4 pb-[4rem]'>
         <div className='mx-auto w-[90%]'>
-            <div className='flex items-center justify-end'>
+            <div className='flex items-center justify-end gap-3'>
+                <Link
+                    href={`/admin/business/category/${id}`}
+                    className='duration-100 ease-linear transition-all border border-white bg-gradient-to-br from-blue-300 to-gray-800 hover:bg-gradient-to-br hover:from-white hover:to-white hover:border hover:border-gray-800 text-white hover:text-gray-800 hover:drop-shadow-md rounded-xl px-4 py-2'>
+                    Edit Category
+                </Link>
                 <button 
                     onClick={() => setIsModal(!isModal)}
                     className='duration-100 ease-linear transition-all border border-gray-800 hover:bg-gray-800 hover:text-white hover:drop-shadow-md rounded-xl px-4 py-2'>

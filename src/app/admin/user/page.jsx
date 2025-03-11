@@ -3,11 +3,17 @@ import React from 'react'
 import { FaAngleRight } from 'react-icons/fa6'
 import UserList from './_components/UserList'
 import { _userListAction } from '@/actions/UserActions'
+import { _membershipListAllAction } from '@/actions/MembershipActions'
+import { _roleListAllAction } from '@/actions/RoleActions'
 
 
 
 export default async function page() {
-  const [ usersData ] = await Promise.all([_userListAction(), ]);
+  const [ usersData, membershipsData, rolesData ] = await Promise.all([
+    _userListAction(), 
+    _membershipListAllAction(),
+    _roleListAllAction()
+  ]);
 
   return (
     <>
@@ -20,7 +26,6 @@ export default async function page() {
           <li><Link href="/admin">Dashboard</Link></li>
           <li><FaAngleRight /></li>
           <li><Link href="/admin/user" className='font-bold '>User List</Link></li>
-
         </ul>
       </div>
      </section>
@@ -33,7 +38,11 @@ export default async function page() {
         </div>
     </section>
 
-    <UserList dbData={usersData} />
+    <UserList 
+      dbData={usersData} 
+      membershipsData={membershipsData} 
+      rolesData={rolesData}
+    />
     </>
   )
 }

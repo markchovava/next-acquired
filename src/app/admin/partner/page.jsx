@@ -2,9 +2,12 @@ import Link from 'next/link'
 import React from 'react'
 import { FaAngleRight } from 'react-icons/fa6'
 import PartnerList from './_components/PartnerList'
+import { _partnerListAction } from '@/actions/PartnerActions'
 
 
-export default function page() {
+export default async function page() {
+  const [partnersData, ] = await Promise.all([_partnerListAction(), ])
+
   return (
     <>
     <section className='w-[100%]'>
@@ -29,7 +32,7 @@ export default function page() {
         </div>
     </section>
 
-    <PartnerList />
+    <PartnerList dbData={partnersData} />
     </>
   )
 }

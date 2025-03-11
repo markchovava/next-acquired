@@ -5,6 +5,60 @@ import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 
 
+
+export async function cityListAction() {
+  const res = await fetch(`${baseURL}city`, {
+    'method': 'GET',
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+    }
+  });
+  return await res.json();
+}
+export async function cityPaginateAction(url) {
+const res = await fetch(url, {
+  'method': 'GET',
+  headers: {
+    'Accept': 'application/json',
+    'Content-Type': 'application/json',
+  }
+});
+return await res.json();
+}
+export async function cityListAllAction() {
+  const res = await fetch(`${baseURL}city-all`, {
+    'method': 'GET',
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+    }
+  });
+  return await res.json();
+}
+export async function citySearchAction(search) {
+  const res = await fetch(`${baseURL}city-search/${search}`, {
+    'method': 'GET',
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+    }
+  });
+  return await res.json();
+}
+export async function cityViewAction(id) {
+  const res = await fetch(`${baseURL}city/${id}`, {
+    'method': 'GET',
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+    }
+  });
+  return await res.json();
+}
+
+
+/* --------------------------------- */
 export async function _cityListAction() {
     const cookieStore = await cookies();
     const authToken = await cookieStore.get('ACQUIREDZW_AUTH_COOKIE');

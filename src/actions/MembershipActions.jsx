@@ -5,6 +5,18 @@ import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 
 
+
+export async function membershipViewFirstAction() {
+  const res = await fetch(`${baseURL}membership-first`, {
+    'method': 'GET',
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+    }
+  });
+  return await res.json();
+}
+
 export async function _membershipListAction() {
     const cookieStore = await cookies();
     const authToken = await cookieStore.get('ACQUIREDZW_AUTH_COOKIE');

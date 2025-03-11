@@ -29,8 +29,8 @@ export default function Header() {
                         </Link>
                     </li>
                     <li className='group'>
-                        <Link href="/marketplace" className='group-hover:text-amber-700 ease-linear duration-150 transition-all'>
-                        Marketplace
+                        <Link href="/membership" className='group-hover:text-amber-700 ease-linear duration-150 transition-all'>
+                        Membership
                         </Link>
                     </li>
                     <li className='group'>
@@ -43,11 +43,11 @@ export default function Header() {
                         Partners
                         </Link>
                     </li>
-                    <li className='group'>
+                  {/*   <li className='group'>
                         <Link href="/broker" className='group-hover:text-amber-700 ease-linear duration-150 transition-all'>
                         Brokers
                         </Link>
-                    </li>
+                    </li> */}
                 </ul>
             </nav>
 

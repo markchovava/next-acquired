@@ -12,8 +12,10 @@ import UserAddModal from './UserAddModal';
 
 
 
-export default function UserList({ dbData }) {
+export default function UserList({ dbData, membershipsData, rolesData }) {
     const {userState, userDispatch } = AdminContextState()
+    const [memberships, setMemberships] = useState(membershipsData?.data)
+    const [roles, setRoles] = useState(rolesData?.data)
     const [isModal, setIsModal] = useState(false)
     const [search, setSearch] = useState('');
     const [isSearch, setIsSearch] = useState(false);
@@ -47,10 +49,11 @@ export default function UserList({ dbData }) {
             }
             try{
             const res = await _userSearchAction(search);
+            console.log('search', res)
             userDispatch({type: 'ADD_DATA', payload: {
                 items: res?.data,
-                prevURL: res?.links.prev,
-                nextURL: res?.links.next,
+                prevURL: res?.links?.prev,
+                nextURL: res?.links?.next,
             }});
             setIsSearch(false);
             } catch (error) {
@@ -64,8 +67,8 @@ export default function UserList({ dbData }) {
             const res = await _userListAction();
             userDispatch({type: 'ADD_DATA', payload: {
                 items: res?.data,
-                prevURL: res?.links.prev,
-                nextURL: res?.links.next,
+                prevURL: res?.links?.prev,
+                nextURL: res?.links?.next,
             }});
             
             } catch (error) {
@@ -135,7 +138,9 @@ export default function UserList({ dbData }) {
                 { userState?.items?.length > 0 ?
                    userState?.items?.map((i, key) => (
                         <div key={key} className='mx-auto w-[100%] py-2 flex items-center justify-start border-b border-x border-gray-300'>
-                            <div className='w-[25%] border-r border-gray-300 px-3 py-2'>{i?.name ?? 'Not Added'}</div>
+                            <div className='w-[25%] border-r border-gray-300 px-3 py-2'>
+                              {i?.name ?? 'Not Added'}
+                            </div>
                             <div className='w-[25%] border-r border-gray-300 px-3 py-2'>{i?.email ?? 'Not Added'}</div>
                             <div className='w-[20%] border-r border-gray-300 px-3 py-2'>{i?.role?.name ?? 'Not Added'}</div>
                             <div className='w-[20%] border-r border-gray-300 px-3 py-2'>
@@ -197,7 +202,10 @@ export default function UserList({ dbData }) {
     <UserAddModal 
         getData={getData} 
         isModal={isModal} 
-        setIsModal={setIsModal} />
+        setIsModal={setIsModal}
+        roles={roles} 
+        memberships={memberships} 
+    />
     </>
   )
 }

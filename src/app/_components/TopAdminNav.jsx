@@ -3,9 +3,9 @@ import React, { useState } from 'react'
 import Link from 'next/link'
 import { AnimatePresence, motion } from 'framer-motion'
 import { FaHome } from "react-icons/fa";
-import { IoClose } from "react-icons/io5";
-import { GiHamburgerMenu } from 'react-icons/gi';
 import TopAdminNavResponsive from './TopAdminNavResponsive';
+import { cookieRoleClient } from '@/cookies/cookieRoleClient';
+import { getCookie } from 'cookies-next';
 
 
 const variants = {
@@ -17,6 +17,7 @@ const variants = {
 
 
 export default function TopAdminNav() {
+    const {getRoleCookie, cookieRoleName } = cookieRoleClient()
     const [isActive, setIsActive] = useState({
         zero: false,
         one: false,
@@ -30,11 +31,11 @@ export default function TopAdminNav() {
         nine: false,
         ten: false,
     })
-
-
+    const roleToken = getCookie(cookieRoleName)
 
   return (
     <>
+    {roleToken <= 2 &&
     <section className='w-[100%] bg-slate-900 text-gray-300'>
         <div className='hidden lg:flex mx-auto w-[90%] py-3 items-center justify-between'>
             <ul className='lg:w-auto flex items-center lg:justify-start gap-6'>
@@ -50,7 +51,7 @@ export default function TopAdminNav() {
                     </Link>
                 </li>
 
-                {/* USER */}
+                {/* SETTINGS */}
                 <li className='relative z-[100] w-[100%] h-[100%]'>
                     <button 
                         onClick={() => setIsActive( {eight: !isActive.eight} )}
@@ -245,12 +246,37 @@ export default function TopAdminNav() {
                     </AnimatePresence>
                 </li>
 
+                {/* Subscription */}
+                <li className='relative z-[100] w-[100%] h-[100%]'>
+                    <button 
+                        onClick={() => setIsActive( {nine: !isActive.nine} )}
+                        className={`${isActive.nine && "text-white font-semibold"} w-[100%] h-[100%]`}>
+                        Message
+                    </button>
+                    <AnimatePresence>
+                        {isActive.nine &&
+                        /*  */
+                        <motion.ul 
+                            variants={variants} 
+                            initial='hidden'
+                            animate='visible'
+                            exit="hidden" 
+                            className='text-gray-200 text-sm absolute z-10 w-[150%] top-[140%] drop-shadow border border-gray-600 bg-slate-900 rounded-b-lg'>
+                            <li className='px-2 pb-2 hover:bg-slate-950'>
+                                <Link href="/admin/message/business">Business Messages</Link>
+                            </li>
+                        </motion.ul>
+                        }
+                    </AnimatePresence>
+                </li>
+
             </ul>
         </div>
 
         <TopAdminNavResponsive />
 
     </section>
+    }
 
     </>
   )

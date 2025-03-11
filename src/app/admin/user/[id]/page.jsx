@@ -2,11 +2,20 @@ import Link from 'next/link'
 import React from 'react'
 import { FaAngleRight } from 'react-icons/fa6'
 import UserView from './_components/UserView'
+import { _userViewAction } from '@/actions/UserActions'
+import { _membershipListAllAction } from '@/actions/MembershipActions'
+import { _roleListAllAction } from '@/actions/RoleActions'
 
 
 
 
-export default function page() {
+export default async function page({ params: {id} }) {
+  const [userData, membershipsData, rolesData] = await Promise.all([
+                                                    _userViewAction(id),
+                                                    _membershipListAllAction(),
+                                                    _roleListAllAction()
+                                                ]);
+
   return (
     <>
      <section className='w-[100%]'>
@@ -19,7 +28,7 @@ export default function page() {
           <li><FaAngleRight /></li>
           <li><Link href="/admin/user">User List</Link></li>
           <li><FaAngleRight /></li>
-          <li><Link href="/admin/user/1" className='font-bold '>User</Link></li>
+          <li><Link href={`/admin/user/${id}`} className='font-bold '>User</Link></li>
 
         </ul>
       </div>
@@ -34,7 +43,12 @@ export default function page() {
     </section>
 
 
-    <UserView />
+    <UserView 
+        id={id} 
+        dbData={userData} 
+        membershipsData={membershipsData} 
+        rolesData={rolesData} 
+    />
 
 
 

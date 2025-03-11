@@ -5,6 +5,59 @@ import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 
 
+export async function provinceListAction() {
+  const res = await fetch(`${baseURL}province`, {
+    'method': 'GET',
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+    }
+  });
+  return await res.json();
+}
+export async function provincePaginateAction(url) {
+  const res = await fetch(url, {
+    'method': 'GET',
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+    }
+  });
+  return await res.json();
+}
+export async function provinceListAllAction() {
+  const res = await fetch(`${baseURL}province-all`, {
+    'method': 'GET',
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+    }
+  });
+  return await res.json();
+}
+export async function provinceSearchAction(search) {
+  const res = await fetch(`${baseURL}province-search/${search}`, {
+    'method': 'GET',
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+    }
+  });
+  return await res.json();
+}
+export async function provinceViewAction(id) {
+  const res = await fetch(`${baseURL}province/${id}`, {
+    'method': 'GET',
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+    }
+  });
+  return await res.json();
+}
+
+/* ------------------------------------------ */
+
 export async function _provinceListAction() {
     const cookieStore = await cookies();
     const authToken = await cookieStore.get('ACQUIREDZW_AUTH_COOKIE');

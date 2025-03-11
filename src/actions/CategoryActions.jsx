@@ -5,6 +5,60 @@ import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 
 
+
+export async function categoryListAction() {
+  const res = await fetch(`${baseURL}category`, {
+    'method': 'GET',
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+    }
+  });
+  return await res.json();
+}
+export async function categoryPaginateAction(url) {
+  const res = await fetch(url, {
+    'method': 'GET',
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+    }
+  });
+  return await res.json();
+}
+export async function categoryListAllAction() {
+  const res = await fetch(`${baseURL}category-all`, {
+    'method': 'GET',
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+    }
+  });
+  return await res.json();
+}
+export async function categorySearchAction(search) {
+  const res = await fetch(`${baseURL}category-search/${search}`, {
+    'method': 'GET',
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+    }
+  });
+  return await res.json();
+}
+export async function categoryViewAction(id) {
+  const res = await fetch(`${baseURL}category/${id}`, {
+    'method': 'GET',
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+    }
+  });
+  return await res.json();
+}
+
+/* --------------------------------------- */
+
 export async function _categoryListAction() {
     const cookieStore = await cookies();
     const authToken = await cookieStore.get('ACQUIREDZW_AUTH_COOKIE');

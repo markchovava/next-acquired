@@ -22,7 +22,6 @@ export default async function page() {
           <li><Link href="/admin">Dashboard</Link></li>
           <li><FaAngleRight /></li>
           <li><Link href="/admin/business" className='font-bold '>Business List</Link></li>
-
         </ul>
       </div>
      </section>

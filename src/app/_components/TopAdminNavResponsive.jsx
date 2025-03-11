@@ -277,6 +277,29 @@ export default function TopAdminNavResponsive() {
                         }
                     </AnimatePresence>
                 </li>
+                {/* MESSAGE */}
+                <li className='relative z-[100] w-[100%] h-[100%]'>
+                    <button 
+                        onClick={() => setIsActive( {nine: !isActive.nine} )}
+                        className={`${isActive.nine && "text-white font-semibold"} pb-2 w-[100%] h-[100%]`}>
+                        Messages
+                    </button>
+                    <AnimatePresence>
+                        {isActive.nine &&
+                        /*  */
+                        <motion.ul 
+                            variants={variants} 
+                            initial='hidden'
+                            animate='visible'
+                            exit="hidden" 
+                            className='text-gray-200 text-sm relative w-[100%] drop-shadow bg-slate-950'>
+                            <li className='px-2 py-2 hover:bg-black flex items-center justify-center'>
+                                <Link href="/admin/message/business" className='text-center'>Business Messages</Link>
+                            </li>
+                        </motion.ul>
+                        }
+                    </AnimatePresence>
+                </li>
 
                 
 

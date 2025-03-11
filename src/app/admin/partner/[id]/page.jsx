@@ -2,11 +2,15 @@ import Link from 'next/link'
 import React from 'react'
 import { FaAngleRight } from 'react-icons/fa6'
 import PartnerView from './_components/PartnerView'
+import { _partnerViewAction } from '@/actions/PartnerActions'
 
 
 
 
-export default function page() {
+export default async function page({ params: {id} }) {
+  const [partnerData, ] = await Promise.all([_partnerViewAction(id), ])
+
+
   return (
     <>
      <section className='w-[100%]'>
@@ -19,7 +23,7 @@ export default function page() {
           <li><FaAngleRight /></li>
           <li><Link href="/admin/partner">Partner List</Link></li>
           <li><FaAngleRight /></li>
-          <li><Link href="/admin/partner/1" className='font-bold '>Partner</Link></li>
+          <li><Link href={`/admin/partner/${id}`} className='font-bold '>Partner</Link></li>
 
         </ul>
       </div>
@@ -34,7 +38,7 @@ export default function page() {
     </section>
 
 
-    <PartnerView />
+    <PartnerView id={id} dbData={partnerData} />
 
 
 

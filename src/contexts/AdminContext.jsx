@@ -4,6 +4,7 @@ import { CategoryInit, CategoryInitialState, CategoryReducer } from "@/reducers/
 import { CityInit, CityInitialState, CityReducer } from "@/reducers/CityReducer";
 import { FaqInit, FaqInitialState, FaqReducer } from "@/reducers/FaqReducer";
 import { MembershipInit, MembershipInitialState, MembershipReducer } from "@/reducers/MembershipReducer";
+import { PartnerInit, PartnerInitialState, PartnerReducer } from "@/reducers/PartnerReducer";
 import { ProvinceInit, ProvinceInitialState, ProvinceReducer } from "@/reducers/ProvinceReducer";
 import { RoleInit, RoleInitialState, RoleReducer } from "@/reducers/RoleReducer";
 import { UserInit, UserInitialState, UserReducer } from "@/reducers/UserReducer";
@@ -12,15 +13,17 @@ import { createContext, useContext, useReducer } from "react";
 
 export const AdminContext = createContext();
 
+
 export default function AdminContextProvider({ children }) {
+    const [businessState, businessDispatch] = useReducer(BusinessReducer, BusinessInitialState, BusinessInit);
     const [categoryState, categoryDispatch] = useReducer(CategoryReducer, CategoryInitialState, CategoryInit);
     const [cityState, cityDispatch] = useReducer(CityReducer, CityInitialState, CityInit);
     const [faqState, faqDispatch] = useReducer(FaqReducer, FaqInitialState, FaqInit);
     const [membershipState, membershipDispatch] = useReducer(MembershipReducer, MembershipInitialState, MembershipInit);
+    const [partnerState, partnerDispatch] = useReducer(PartnerReducer, PartnerInitialState, PartnerInit);
     const [provinceState, provinceDispatch] = useReducer(ProvinceReducer, ProvinceInitialState, ProvinceInit);
     const [roleState, roleDispatch] = useReducer(RoleReducer, RoleInitialState, RoleInit);
     const [userState, userDispatch] = useReducer(UserReducer, UserInitialState, UserInit);
-    const [businessState, businessDispatch] = useReducer(BusinessReducer, BusinessInitialState, BusinessInit);
    
     return (
         <AdminContext.Provider value={{  
@@ -32,6 +35,7 @@ export default function AdminContextProvider({ children }) {
             provinceState, provinceDispatch,
             userState, userDispatch,
             businessState, businessDispatch,
+            partnerState, partnerDispatch,
         }}>
             {children}
         </AdminContext.Provider>

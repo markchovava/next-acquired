@@ -54,8 +54,8 @@ export default function HeaderResponsive() {
                     </Link>
                 </motion.li>
                 <motion.li className='group'>
-                    <Link href="/marketplace" className='group-hover:text-amber-600 ease-linear duration-150 transition-all'>
-                        Marketplace
+                    <Link href="/membership" className='group-hover:text-amber-600 ease-linear duration-150 transition-all'>
+                        Membership
                     </Link>
                 </motion.li>
                 <motion.li className='group'>

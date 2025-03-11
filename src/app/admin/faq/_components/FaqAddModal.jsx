@@ -48,7 +48,6 @@ export default function FaqAddModal({getData, isModal, setIsModal}) {
             }
             try{
                 const res = await _faqStoreAction(formData);
-                console.log(res);
                 if(res.status == 1) {
                     await getData();
                     toast.success(res.message, reactToastifyDark);

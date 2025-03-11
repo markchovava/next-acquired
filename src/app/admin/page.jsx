@@ -12,8 +12,14 @@ import { BiCategoryAlt } from "react-icons/bi";
 import { MdTaskAlt } from "react-icons/md";
 import { FaInfoCircle } from "react-icons/fa";
 import { FaRegHandshake } from "react-icons/fa6";
+import { _businessMessageIndexAllByStatusAction } from '@/actions/BusinessMessageActions';
+import { FaMessage } from "react-icons/fa6";
 
-export default function page() {
+
+
+export default async function page() {
+  const status = 'Unread';
+  const [businessMessageData, ] = await Promise.all([_businessMessageIndexAllByStatusAction(status)]);
 
   return (
     <>
@@ -36,9 +42,21 @@ export default function page() {
 
     <section className='w-[100%]'>
       <div className='mx-auto w-[90%]'>
-        <h1 className='font-serif text-[3rem] leading-tight border-b border-gray-300 mb-12'>
-          Dashboard
-        </h1>
+        
+        {businessMessageData?.data &&
+          <div className='flex items-center justify-end'>
+            <Link href='/admin/message/business' className=' hover:drop-shadow-md flex items-center justify-end gap-2 bg-gray-800 rounded-full p-2'>
+              <FaMessage className='text-xl text-white' />
+              <span className='text-white'>{businessMessageData?.data && businessMessageData?.data.length}</span>
+            </Link>
+          </div>
+        }
+
+        <div className='mb-12'>
+          <h1 className='font-serif text-[3rem] leading-tight border-b border-gray-300 '>
+            Dashboard
+          </h1>
+        </div>
 
         <section className='w-[100%] grid lg:grid-cols-4 md:grid-cols-2 grid-cols-1 gap-8 mb-[5rem]'> 
           {/* APPINFO */}

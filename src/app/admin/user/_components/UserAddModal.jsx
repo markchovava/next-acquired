@@ -1,8 +1,10 @@
 "use client";
 import { _userStoreAction } from '@/actions/UserActions';
+import { reactToastifyDark } from '@/utils/reactToastify';
 import { AnimatePresence, motion } from 'framer-motion';
 import React, { useState } from 'react'
 import { IoClose } from 'react-icons/io5';
+import { toast } from 'react-toastify';
 
 
 const variants = {
@@ -14,50 +16,106 @@ const variants = {
 }
 
 
-export default function UserAddModal({isModal, setIsModal}) {
-    const [data, setData] = useState({})
-        const [errMsg, setErrMsg] = useState({})
-        const [isSubmit, setIsSubmit] = useState(false)
-        const handleInput = (e) => {
-            setData({...data, [e.target.name]: e.target.value});
+export default function UserAddModal({memberships, roles, getData, isModal, setIsModal}) {
+    const [data, setData] = useState({
+        fname: '',
+        lname: '',
+        email: '',
+        phone: '',
+        email: '',
+        phone: '',
+        address: '',
+        membership_status: '',
+        membership_id: '',
+        linkedin: '',
+        skillset: '',
+        asquisition: '',
+        role_level: '',
+        bio: '',
+    })
+    const [errMsg, setErrMsg] = useState({})
+    const [isSubmit, setIsSubmit] = useState(false)
+    const handleInput = (e) => {
+        setData({...data, [e.target.name]: e.target.value});
+    }
+
+    async function postData() {
+        if(!data?.name){
+            const message = "Full Name is required."
+            toast.warn(message, reactToastifyDark)
+            setErrMsg({name: message})
+            setIsSubmit(false)
+            return
         }
-    
-        async function postData() {
-            if(!data?.name){
-                const message = "Name is required."
-                toast.warn(message, reactToastifyDark)
-                setErrMsg({name: message})
-                setIsSubmit(false)
-                return
-            }
-            if(!data?.level){
-                const message = "Level is required."
-                toast.warn(level, reactToastifyDark)
-                setErrMsg({name: message})
-                setIsSubmit(false)
-                return
-            }
-            const formData = {
-                name: data?.name,
-                level: data?.level,
-            }
-            try{
-                const res = await _userStoreAction(formData);
-                if(res.status == 1) {
-                    await getData();
-                    toast.success(res.message, reactToastifyDark);
-                    setData({});
-                    setErrMsg({});
-                    setIsSubmit(false)
-                    setIsModal(false);
-                    return;
-                }
-                } catch (error) {
-                    console.error(`Error: ${error}`);
-                    setIsSubmit(false)
-                    return;
-            }
+        if(!data?.role_level){
+            const message = "Role is required."
+            toast.warn(role_level, reactToastifyDark)
+            setErrMsg({role_level: message})
+            setIsSubmit(false)
+            return
         }
+        if(!data?.membership_id){
+            const message = "Membership is required."
+            toast.warn(membership_id, reactToastifyDark)
+            setErrMsg({membership_id: message})
+            setIsSubmit(false)
+            return
+        }
+        if(!data?.membership_status){
+            const message = "Membership Status is required."
+            toast.warn(membership_status, reactToastifyDark)
+            setErrMsg({membership_status: message})
+            setIsSubmit(false)
+            return
+        }
+        if(!data?.email){
+            const message = "Email is required."
+            toast.warn(email, reactToastifyDark)
+            setErrMsg({email: message})
+            setIsSubmit(false)
+            return
+        }
+        
+        const formData = {
+            name: data?.name,
+            email: data?.email,
+            phone: data?.phone,
+            role_level: data?.role_level,
+            membership_id: data?.membership_id,
+            membership_status: data?.membership_status,
+            linkedin: data?.linkedin,
+            address: data?.address,
+            bio: data?.bio,
+            skillset: data?.skillset,
+            asquisition: data?.asquisition,
+        }
+
+        try{
+            const res = await _userStoreAction(formData);
+            console.log('res', res)
+            if(res?.status == 0){
+                const message = res?.message;
+                oast.success(message, reactToastifyDark);
+                setErrMsg({email: message});
+                setIsSubmit(false);
+                return;
+            }
+            if(res?.status == 1) {
+                await getData();
+                toast.success(res?.message, reactToastifyDark);
+                setData({});
+                setErrMsg({});
+                setIsSubmit(false)
+                setIsModal(false);
+                return;
+            }
+        } catch (error) {
+            console.error(`Error: ${error}`);
+            setIsSubmit(false)
+            return;
+        }
+    }
+
   return (
     <>
     <AnimatePresence>
@@ -76,35 +134,93 @@ export default function UserAddModal({isModal, setIsModal}) {
                     <IoClose className='text-2xl' />
                 </button>
                 </div>
-                <form>
+                <form action={postData} onSubmit={() => setIsSubmit(true)}>
                     <h2 className='font-serif text-[2.6rem] mb-6 text-center border-b border-gray-300'>
                     Add User
                     </h2>
-                    <div className='flex items-center justify-start gap-3'>
-                        {/*  */}
-                        <div className='w-[100%] mb-6'>
-                            <p className='mb-2 leading-none text-sm font-semibold'>First Name:</p>
-                            <input 
-                                type='text' 
-                                name='fname'
-                                value={data?.fname}
-                                onChange={handleInput}
-                                placeholder='Name' 
-                                className='w-[100%] rounded-xl border border-gray-300 outline-none p-3' />
-                        </div>
-                        {/*  */}
-                        <div className='w-[100%] mb-6'>
-                            <p className='mb-2 leading-none text-sm font-semibold'>Last Name:</p>
-                            <input 
-                                type='text' 
-                                name='lname'
-                                value={data?.lname}
-                                onChange={handleInput}
-                                placeholder='Last Name' 
-                                className='w-[100%] rounded-xl border border-gray-300 outline-none p-3' />
-                        </div>
+                    {/* FULL NAME */}
+                     
+                    <div className='w-[100%] mb-6'>
+                        <p className='mb-2 leading-none text-sm font-semibold'>Full Name:</p>
+                        <input 
+                            type='text' 
+                            name='name'
+                            value={data?.name}
+                            onChange={handleInput}
+                            placeholder='Full Name' 
+                            className='w-[100%] rounded-xl border border-gray-300 outline-none p-3' />
+                        {errMsg?.name &&
+                            <p className='text-red-500 text-sm'>{errMsg?.name}</p>}
                     </div>
-                    {/* ADDRESS */}
+                    {/* ROLES */}
+                    {roles &&
+                    <div className='w-[100%] mb-6'>
+                        <p className='mb-2 leading-none text-sm font-semibold'>Role:</p>
+                        <select 
+                            type='text' 
+                            name='role_level'
+                            onChange={handleInput} 
+                            className='w-[100%] rounded-xl border border-gray-300 outline-none p-3'>
+                            <option value=''>Select an option.</option>
+                            { roles.length > 0 &&
+                                roles.map((i, key) => (
+                                    <option key={key} value={i?.level}>{i?.name}</option>
+                                ))
+                            }
+                        </select>
+                        {errMsg?.role_level &&
+                                <p className='text-red-500 text-sm'>{errMsg?.role_level}</p>}
+                    </div>
+                    }
+                    {/* MEMBERSHIPS */}
+                    {memberships &&
+                    <div className='w-[100%] mb-6'>
+                        <p className='mb-2 leading-none text-sm font-semibold'>Membership Type:</p>
+                        <select 
+                            name='membership_id'
+                            onChange={handleInput} 
+                            className='w-[100%] rounded-xl border border-gray-300 outline-none p-3'>
+                            <option value=''>Select an option.</option>
+                            {memberships.length > 0 &&
+                                memberships.map((i, key) => (
+                                    <option key={key} value={i?.id}>{i?.name}</option>
+                                ))
+                            }
+                        </select>
+                        {errMsg?.membership_id &&
+                            <p className='text-red-500 text-sm'>{errMsg?.membership_id}</p>}
+                    </div>
+                    }
+                    {/* MEMBERSHIP STATUS */}
+                    { memberships &&
+                    <div className='w-[100%] mb-6'>
+                        <p className='mb-2 leading-none text-sm font-semibold'>Membership Status:</p>
+                        <select 
+                            name='membership_status'
+                            onChange={handleInput} 
+                            className='w-[100%] rounded-xl border border-gray-300 outline-none p-3'>
+                            <option value=''>Select an option.</option>
+                            <option value={0}>Not Active</option>
+                            <option value={1}>Active</option>
+                        </select>
+                        {errMsg?.membership_status &&
+                            <p className='text-red-500 text-sm'>{errMsg?.membership_status}</p>}
+                    </div>
+                    }
+                    {/* EMAIL */}
+                    <div className='w-[100%] mb-6'>
+                        <p className='mb-2 leading-none text-sm font-semibold'>Email:</p>
+                        <input 
+                            type='text' 
+                            name='email'
+                            value={data?.email}
+                            onChange={handleInput}
+                            placeholder='Email' 
+                            className='w-[100%] rounded-xl border border-gray-300 outline-none p-3' />
+                        {errMsg?.email &&
+                            <p className='text-red-500 text-sm'>{errMsg?.email}</p>}    
+                    </div>
+                    {/* PHONE */}
                     <div className='w-[100%] mb-6'>
                         <p className='mb-2 leading-none text-sm font-semibold'>Phone:</p>
                         <input 
