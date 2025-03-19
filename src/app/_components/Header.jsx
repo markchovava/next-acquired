@@ -28,11 +28,11 @@ export default function Header() {
                         About Us
                         </Link>
                     </li>
-                    <li className='group'>
+                   {/*  <li className='group'>
                         <Link href="/membership" className='group-hover:text-amber-700 ease-linear duration-150 transition-all'>
                         Membership
                         </Link>
-                    </li>
+                    </li> */}
                     <li className='group'>
                         <Link href="faq" className='group-hover:text-amber-700 ease-linear duration-150 transition-all'>
                         FAQs
