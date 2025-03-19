@@ -10,20 +10,22 @@ import { cookieRoleClient } from '@/cookies/cookieRoleClient';
 import { loginAction } from '@/actions/AuthActions';
 import { useRouter } from 'next/navigation';
 import { localAuth } from '@/localstorages/authLocal';
+import { cookieAdminClient } from '@/cookies/cookieAdminClient';
 
 
 
 export default function LoginEdit() {
     const router = useRouter();
-    const [data, setData] = useState({
-        email: '',
-        password: '',
-    });
     const [isSubmit, setIsSubmit] = useState(false);
     const [errMsg, setErrMsg] = useState({});
     const { setAuthCookie } =  cookieAuthClient()
     const { setRoleCookie } =  cookieRoleClient()
+    const { setAdminCookie } = cookieAdminClient()
     const { setAuthLocal } = localAuth()
+    const [data, setData] = useState({
+        email: '',
+        password: '',
+    });
     const handleInput = (e) => {
         setData({...data, [e.target.name]: e.target.value})
     }
@@ -49,15 +51,23 @@ export default function LoginEdit() {
         }
         try{
             const res = await loginAction(formData);
+            console.log('res', res)
             if(res.status == 1) {
                 toast.success(res?.message, reactToastifyDark);
                 setAuthCookie(res?.auth_token); 
-                setAuthLocal(res?.auth_token)
-                if(res?.role_level) { 
-                    setRoleCookie(String(res?.role_level)); 
+                if(res?.data?.role_level) { 
+                    setRoleCookie(String(res?.data?.role_level)); 
+                }
+                if(res?.data?.is_admin) { 
+                    setAdminCookie(String(res?.data?.is_admin)); 
+                    if(res?.data?.is_admin == 'Yes'){
+                        router.push('/admin');
+                        setErrMsg({});
+                        return;
+                    }
                 }
                 setErrMsg({});
-                router.push('/admin');
+                router.push('/client');
                 setIsSubmit(false);
                 return;
             }

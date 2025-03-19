@@ -54,7 +54,7 @@ export default async function page() {
 
         <div className='mb-12'>
           <h1 className='font-serif text-[3rem] leading-tight border-b border-gray-300 '>
-            Dashboard
+            Admin Dashboard
           </h1>
         </div>
 
@@ -158,17 +158,7 @@ export default async function page() {
               </h3>
             </div>
           </Link>
-          {/* MEMBERSHIPS */}
-          <Link href="/admin/membership">
-            <div className='border border-gray-300 text-gray-400 bg-white hover:drop-shadow-lg py-[1.5rem] transition-all ease-linear duration-200'>
-              <div className='flex items-center justify-center mb-4'>
-                <MdGroups className='text-[6rem] ' />
-              </div>
-              <h3 className='text-lg text-center flex justify-center items-center'>
-                Memberships
-              </h3>
-            </div>
-          </Link>
+         
           {/* SUBSCRIPTION */}
           <Link href="/admin/subscription">
             <div className='border border-green-300 text-green-400 bg-white hover:drop-shadow-lg py-[1.5rem] transition-all ease-linear duration-200'>

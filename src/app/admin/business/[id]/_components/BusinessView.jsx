@@ -43,7 +43,7 @@ export default function BusinessView({id, dbData, citiesData, provincesData}) {
                     <Image
                         fill
                         style={{ objectFit: 'cover' }} 
-                        src={baseURL + data?.image} 
+                        src={data?.image ? (baseURL + data?.image) : './assets/img/no-img.jpg'} 
                         alt={data?.name}
                     />
                 </div>

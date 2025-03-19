@@ -147,6 +147,8 @@ export async function _categoryStoreAction(data) {
         'Authorization': `Bearer ${authToken?.value}`
       }
     });
+    revalidatePath('/');
+    revalidatePath('/client/category');
     revalidatePath('/admin/category');
     return await res.json();
 }
@@ -164,6 +166,9 @@ export async function _categoryUpdateAction(data, id) {
         'Authorization': `Bearer ${authToken?.value}`
       }
     });
+    revalidatePath('/');
+    revalidatePath('/admin/category');
+    revalidatePath('/client/category');
     revalidatePath(`/admin/category/${id}`);
     return await res.json();
 }
@@ -180,6 +185,8 @@ export async function _categoryDeleteAction(id) {
         'Authorization': `Bearer ${authToken?.value}`
       }
     });
+    revalidatePath('/');
     revalidatePath(`/admin/category`);
+    revalidatePath('/client/category');
     return await res.json();
 }

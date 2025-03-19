@@ -19,8 +19,8 @@ export async function loginAction(data) {
 }
 
 export async function _logoutAction() {
-    const cookieStore = cookies();
-    const authToken = cookieStore.get('ACQUIREDZW_AUTH_COOKIE');
+    const cookieStore = await cookies();
+    const authToken = await cookieStore.get('ACQUIREDZW_AUTH_COOKIE');
     if(!authToken?.value){ redirect('/login'); }
     const res = await fetch(`${baseURL}api/logout`, {
       'method': 'GET',

@@ -12,9 +12,8 @@ import UserAddModal from './UserAddModal';
 
 
 
-export default function UserList({ dbData, membershipsData, rolesData }) {
+export default function UserList({ dbData, rolesData }) {
     const {userState, userDispatch } = AdminContextState()
-    const [memberships, setMemberships] = useState(membershipsData?.data)
     const [roles, setRoles] = useState(rolesData?.data)
     const [isModal, setIsModal] = useState(false)
     const [search, setSearch] = useState('');
@@ -130,7 +129,7 @@ export default function UserList({ dbData, membershipsData, rolesData }) {
                     <div className='w-[25%] border-r border-white px-3 py-2'>NAME</div>
                     <div className='w-[25%] border-r border-white px-3 py-2'>EMAIL</div>
                     <div className='w-[20%] border-r border-white px-3 py-2'>ROLE</div>
-                    <div className='w-[20%] border-r border-white px-3 py-2'>MEMBERSHIP</div>
+                    <div className='w-[20%] border-r border-white px-3 py-2'>ADMIN STATUS</div>
                     <div className='w-[10%] px-3 py-2 text-end'>ACTION</div>
                 </div>
 
@@ -144,7 +143,7 @@ export default function UserList({ dbData, membershipsData, rolesData }) {
                             <div className='w-[25%] border-r border-gray-300 px-3 py-2'>{i?.email ?? 'Not Added'}</div>
                             <div className='w-[20%] border-r border-gray-300 px-3 py-2'>{i?.role?.name ?? 'Not Added'}</div>
                             <div className='w-[20%] border-r border-gray-300 px-3 py-2'>
-                                {i?.membership?.name ?? 'Not Added'}
+                                {i?.is_admin ? 'Has Admin Rights' : 'Not Admin'}
                             </div>
                             <div className='w-[10%] px-3 py-2 text-end flex items-center justify-end gap-3 text-xl'>
                                 <Link title='View' href={`/admin/user/${i?.id}`}> 
@@ -204,8 +203,9 @@ export default function UserList({ dbData, membershipsData, rolesData }) {
         isModal={isModal} 
         setIsModal={setIsModal}
         roles={roles} 
-        memberships={memberships} 
     />
+
+
     </>
   )
 }

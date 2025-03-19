@@ -7,15 +7,15 @@ export const cookieRoleClient = () => {
     const cookieRoleName = 'ACQUIREDZW_ROLE_COOKIE'
 
     const setRoleCookie = (token) => {
-        setCookie('ACQUIREDZW_ROLE_COOKIE', token, { maxAge: cookieDuration });
+        setCookie(cookieRoleName, token, { maxAge: cookieDuration });
     }
    
     const removeRoleCookie = () => {
-        deleteCookie('ACQUIREDZW_ROLE_COOKIE');
+        deleteCookie(cookieRoleName);
     }
 
     const getRoleCookie = () => {
-        getCookie('ACQUIREDZW_ROLE_COOKIE');
+        getCookie(cookieRoleName);
     }
 
     return {

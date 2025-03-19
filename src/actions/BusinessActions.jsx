@@ -175,7 +175,9 @@ export async function _businessStoreAction(data) {
         'Authorization': `Bearer ${authToken?.value}`
       }
     });
+    revalidatePath('/');
     revalidatePath('/admin/business');
+    revalidatePath('/client/business');
     return await res.json();
 }
 
@@ -190,6 +192,9 @@ export async function _businessUpdateAction(data, id) {
         'Authorization': `Bearer ${authToken?.value}`
       }
     });
+    revalidatePath('/');
+    revalidatePath('/admin/business');
+    revalidatePath('/client/business');
     revalidatePath(`/admin/business/${id}`);
     return await res.json();
 }
@@ -206,6 +211,9 @@ export async function _businessDeleteAction(id) {
         'Authorization': `Bearer ${authToken?.value}`
       }
     });
+    revalidatePath('/');
+    revalidatePath('/admin/business');
+    revalidatePath('/client/business');
     revalidatePath(`/admin/business`);
     return await res.json();
 }

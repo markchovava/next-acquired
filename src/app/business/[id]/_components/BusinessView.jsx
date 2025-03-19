@@ -130,26 +130,24 @@ export default function BusinessView({id, dbData}) {
                 </div>
 
                 {/* CONTACT INFORMATION */}
-                {   getRoleCookie() &&
-                    getRoleCookie() <= 3 &&
-                    <section className='mb-5'>
-                        <h3 className='leading-tight text-lg font-semibold mb-2'>Contact information</h3>
-                        <div className='flex items-center justify-start gap-3 mb-1'>
-                            <div>Email</div>
-                            <div>{data?.email}</div>
-                        </div>
-                        <div className='flex items-center justify-start gap-3 mb-1'>
-                            <div>Phone</div>
-                            <div>{data?.phone}</div>
-                        </div>
-                        <div className='flex items-center justify-start gap-3 mb-1'>
-                            <div>Province</div>
-                            <div>{data?.province?.name}</div>
-                        </div>
-                    </section>
+                <section className='mb-5'>
+                    <h3 className='leading-tight text-lg font-semibold mb-2'>Contact information</h3>
+                    <div className='flex items-center justify-start gap-3 mb-1'>
+                        <div>Email</div>
+                        <div>{data?.email}</div>
+                    </div>
+                    <div className='flex items-center justify-start gap-3 mb-1'>
+                        <div>Phone</div>
+                        <div>{data?.phone}</div>
+                    </div>
+                    <div className='flex items-center justify-start gap-3 mb-1'>
+                        <div>Province</div>
+                        <div>{data?.province?.name}</div>
+                    </div>
+                </section>
 
-                }
-
+                
+                {/* ---------------------- */}
                 { data?.business_details?.length > 0 &&
                 <div className='lg:pb-[5rem] pb-[3rem]'>
                     <h3 className='leading-tight text-lg font-semibold mb-2'>Detailed information</h3>

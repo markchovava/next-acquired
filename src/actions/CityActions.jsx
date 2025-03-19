@@ -16,6 +16,7 @@ export async function cityListAction() {
   });
   return await res.json();
 }
+
 export async function cityPaginateAction(url) {
 const res = await fetch(url, {
   'method': 'GET',
@@ -26,6 +27,7 @@ const res = await fetch(url, {
 });
 return await res.json();
 }
+
 export async function cityListAllAction() {
   const res = await fetch(`${baseURL}city-all`, {
     'method': 'GET',
@@ -36,6 +38,7 @@ export async function cityListAllAction() {
   });
   return await res.json();
 }
+
 export async function citySearchAction(search) {
   const res = await fetch(`${baseURL}city-search/${search}`, {
     'method': 'GET',
@@ -46,6 +49,7 @@ export async function citySearchAction(search) {
   });
   return await res.json();
 }
+
 export async function cityViewAction(id) {
   const res = await fetch(`${baseURL}city/${id}`, {
     'method': 'GET',
@@ -147,7 +151,9 @@ export async function _cityStoreAction(data) {
         'Authorization': `Bearer ${authToken?.value}`
       }
     });
-    revalidatePath('/admin/city');
+    revalidatePath('/');
+    revalidatePath(`/admin/city`);
+    revalidatePath('/client/city');
     return await res.json();
 }
 
@@ -164,6 +170,9 @@ export async function _cityUpdateAction(data, id) {
         'Authorization': `Bearer ${authToken?.value}`
       }
     });
+    revalidatePath('/');
+    revalidatePath(`/admin/city`);
+    revalidatePath('/client/city');
     revalidatePath(`/admin/city/${id}`);
     return await res.json();
 }
@@ -180,6 +189,8 @@ export async function _cityDeleteAction(id) {
         'Authorization': `Bearer ${authToken?.value}`
       }
     });
+    revalidatePath('/');
     revalidatePath(`/admin/city`);
+    revalidatePath('/client/city');
     return await res.json();
 }

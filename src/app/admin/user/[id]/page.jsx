@@ -10,9 +10,7 @@ import { _roleListAllAction } from '@/actions/RoleActions'
 
 
 export default async function page({ params: {id} }) {
-  const [userData, membershipsData, rolesData] = await Promise.all([
-                                                    _userViewAction(id),
-                                                    _membershipListAllAction(),
+  const [userData, rolesData] = await Promise.all([ _userViewAction(id),
                                                     _roleListAllAction()
                                                 ]);
 
@@ -45,8 +43,7 @@ export default async function page({ params: {id} }) {
 
     <UserView 
         id={id} 
-        dbData={userData} 
-        membershipsData={membershipsData} 
+        dbData={userData}  
         rolesData={rolesData} 
     />
 

@@ -8,6 +8,7 @@ import { _profileAction } from '@/actions/AuthActions';
 
 export default async function page() {
    const [userData, ] = await Promise.all([_profileAction(), ]);
+   
 
   return (
     <>
@@ -17,8 +18,8 @@ export default async function page() {
         <ul className='flex items-center justify-start gap-2 text-sm'>
           <li><Link href="/">Home</Link></li>
           <li><FaAngleRight /></li>
-         {/*  <li><Link href="/admin">Dashboard</Link></li>
-          <li><FaAngleRight /></li> */}
+          <li><Link href="/admin">Dashboard</Link></li>
+          <li><FaAngleRight /></li>
           <li><Link href="/admin/profile" className='font-bold'>User Profile</Link></li>
         </ul>
       </div>
@@ -26,6 +27,7 @@ export default async function page() {
 
 
     <ProfileView dbData={userData} />
+    
     </>
   )
 }

@@ -9,9 +9,8 @@ import { _roleListAllAction } from '@/actions/RoleActions'
 
 
 export default async function page() {
-  const [ usersData, membershipsData, rolesData ] = await Promise.all([
+  const [ usersData, rolesData ] = await Promise.all([
     _userListAction(), 
-    _membershipListAllAction(),
     _roleListAllAction()
   ]);
 
@@ -40,7 +39,6 @@ export default async function page() {
 
     <UserList 
       dbData={usersData} 
-      membershipsData={membershipsData} 
       rolesData={rolesData}
     />
     </>

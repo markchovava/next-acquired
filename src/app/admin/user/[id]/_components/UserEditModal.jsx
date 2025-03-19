@@ -16,19 +16,16 @@ const variants = {
 }
 
 
-export default function UserEditModal({id, isModal, getData, setIsModal, domData, memberships, roles}) {
+export default function UserEditModal({id, isModal, getData, setIsModal, domData, roles}) {
     const [data, setData] = useState({
         name: domData?.name,
         email: domData?.email,
         phone: domData?.phone,
         role_level: domData?.role_level,
-        membership_id: domData?.membership_id,
-        membership_status: domData?.membership_status,
+        is_admin: domData?.is_admin,
         linkedin: domData?.linkedin,
         address: domData?.address,
         bio: domData?.bio,
-        skillset: domData?.skillset,
-        asquisition: domData?.asquisition,
     });
     const [errMsg, setErrMsg] = useState({})
     const [isSubmit, setIsSubmit] = useState(false)
@@ -52,17 +49,10 @@ export default function UserEditModal({id, isModal, getData, setIsModal, domData
                 setIsSubmit(false)
                 return
             }
-            if(!data?.membership_id){
-                const message = "Membership is required."
-                toast.warn(membership_id, reactToastifyDark)
-                setErrMsg({membership_id: message})
-                setIsSubmit(false)
-                return
-            }
-            if(data?.membership_status != ''){
-                const message = "Membership Status is required."
-                toast.warn(message, reactToastifyDark)
-                setErrMsg({membership_status: message})
+            if(!data?.is_admin){
+                const message = "Admin Status is required."
+                toast.warn(is_admin, reactToastifyDark)
+                setErrMsg({is_admin: message})
                 setIsSubmit(false)
                 return
             }
@@ -79,13 +69,10 @@ export default function UserEditModal({id, isModal, getData, setIsModal, domData
                 email: data?.email,
                 phone: data?.phone,
                 role_level: data?.role_level,
-                membership_id: data?.membership_id,
-                membership_status: data?.membership_status,
                 linkedin: data?.linkedin,
                 address: data?.address,
                 bio: data?.bio,
-                skillset: data?.skillset,
-                asquisition: data?.asquisition,
+                is_admin: data?.is_admin,
             }
 
             console.log('formData', formData)
@@ -165,9 +152,7 @@ export default function UserEditModal({id, isModal, getData, setIsModal, domData
                                 roles.map((i, key) => (
                                     <option 
                                         key={key} 
-                                        value={i?.level} 
-                                        selected={i.level == data?.role_level && 'selected'}
-                                        >
+                                        value={i?.level} >
                                         {i?.name}
                                     </option>
                                 ))
@@ -177,49 +162,22 @@ export default function UserEditModal({id, isModal, getData, setIsModal, domData
                             <p className='text-red-500 text-sm'>{errMsg?.role_level}</p>}
                     </div>
                     }
-                    {/* MEMBERSHIPS */}
-                    {memberships &&
+                    {/* ADMIN STATUS */}
                     <div className='w-[100%] mb-6'>
-                        <p className='mb-2 leading-none text-sm font-semibold'>Membership Type:</p>
+                        <p className='mb-2 leading-none text-sm font-semibold'>Admin Status:</p>
                         <select 
-                            name='membership_id'
+                            type='text' 
+                            name='is_admin'
                             onChange={handleInput} 
-                            value={data?.membership_id}
+                            value={data?.is_admin}
                             className='w-[100%] rounded-xl border border-gray-300 outline-none p-3'>
                             <option value=''>Select an option.</option>
-                            {memberships.length > 0 &&
-                                memberships.map((i, key) => (
-                                    <option 
-                                        key={key} 
-                                        value={i?.id} 
-                                        selected={i?.id == data?.membership_id && 'selected'}
-                                        >
-                                        {i?.name}
-                                    </option>
-                                ))
-                            }
+                            <option value='Yes'>Yes</option>
+                            <option value='No'>No</option>  
                         </select>
-                        {errMsg?.membership_id &&
-                            <p className='text-red-500 text-sm'>{errMsg?.membership_id}</p>}
-                    </div>
-                    }
-                    {/* MEMBERSHIP STATUS */}
-                    { memberships &&
-                    <div className='w-[100%] mb-6'>
-                        <p className='mb-2 leading-none text-sm font-semibold'>Membership Status:</p>
-                        <select 
-                            name='membership_status'
-                            onChange={handleInput} 
-                            value={data?.membership_status}
-                            className='w-[100%] rounded-xl border border-gray-300 outline-none p-3'>
-                            <option value=''>Select an option.</option>
-                            <option value={0} selected={data?.membership_status == 0 && 'selected'}>Not Active</option>
-                            <option value={1} selected={data?.membership_status == 1 && 'selected'}>Active</option>
-                        </select>
-                        {errMsg?.membership_status &&
-                            <p className='text-red-500 text-sm'>{errMsg?.membership_status}</p>}
-                    </div>
-                    }
+                        {errMsg?.is_admin &&
+                            <p className='text-red-500 text-sm'>{errMsg?.is_admin}</p>}
+                    </div>                   
                     {/* EMAIL */}
                     <div className='w-[100%] mb-6'>
                         <p className='mb-2 leading-none text-sm font-semibold'>Email:</p>
@@ -266,29 +224,7 @@ export default function UserEditModal({id, isModal, getData, setIsModal, domData
                             placeholder='LinkedIn' 
                             className='w-[100%] rounded-xl border border-gray-300 outline-none p-3' />
                     </div>
-                    {/* SKILLSET */}
-                    <div className='w-[100%] mb-6'>
-                        <p className='mb-2 leading-none text-sm font-semibold'>Skillset:</p>
-                        <textarea 
-                            type='text' 
-                            name='skillset'
-                            value={data?.skillset}
-                            onChange={handleInput}
-                            placeholder='Skillset' 
-                            className='w-[100%] h-[8rem] rounded-xl border border-gray-300 outline-none p-3'></textarea>
-                    </div>
-                    {/* Asquisition Target */}
-                    <div className='w-[100%] mb-6'>
-                        <p className='mb-2 leading-none text-sm font-semibold'>Asquisition Target:</p>
-                        <textarea 
-                            type='text' 
-                            name='asquisition'
-                            value={data?.asquisition}
-                            onChange={handleInput}
-                            placeholder='Asquisition Target' 
-                            className='w-[100%] h-[8rem] rounded-xl border border-gray-300 outline-none p-3'></textarea>
-                    </div>
-                    {/* About Me */}
+                    {/* BIO */}
                     <div className='w-[100%] mb-6'>
                         <p className='mb-2 leading-none text-sm font-semibold'>About Me (Bio):</p>
                         <textarea 
@@ -302,7 +238,9 @@ export default function UserEditModal({id, isModal, getData, setIsModal, domData
 
                     <div className='w-[100%] mb-6'>
                         <button type='submit' className='w-[100%] rounded-xl bg-gray-800 hover:bg-gray-900 hover:drop-shadow-lg ease-linear transition-all duration-150 text-white py-4'>
-                            {isSubmit ? 'Processing' : 'Submit'}
+                            { isSubmit ? 
+                            'Processing' : 
+                            'Submit' }
                         </button>
                     </div>
 

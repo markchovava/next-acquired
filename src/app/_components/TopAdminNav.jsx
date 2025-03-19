@@ -31,11 +31,12 @@ export default function TopAdminNav() {
         nine: false,
         ten: false,
     })
-    const roleToken = getCookie(cookieRoleName)
+    const adminToken = getCookie('ACQUIREDZW_ADMIN_COOKIE');
+
 
   return (
     <>
-    {roleToken <= 2 &&
+    {adminToken == 'Yes' &&
     <section className='w-[100%] bg-slate-900 text-gray-300'>
         <div className='hidden lg:flex mx-auto w-[90%] py-3 items-center justify-between'>
             <ul className='lg:w-auto flex items-center lg:justify-start gap-6'>
