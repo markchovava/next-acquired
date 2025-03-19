@@ -1,1 +1,1 @@
-export const baseURL = process.env.NEXT_PUBLIC_BASE_URL;
+export const baseURL = 'http://143.110.255.30/';
