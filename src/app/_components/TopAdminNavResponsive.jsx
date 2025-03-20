@@ -65,6 +65,7 @@ export default function TopAdminNavResponsive() {
                         Dashboard
                     </Link>
                 </li>
+
                 {/* SETTINGS */}
                 <li className='relative z-[100] w-[100%] h-[100%]'>
                     <button 
@@ -91,6 +92,7 @@ export default function TopAdminNavResponsive() {
                         }
                     </AnimatePresence>
                 </li>
+
                 {/* USER */}
                 <li className='relative z-[100] w-[100%] h-[100%]'>
                     <button 
@@ -114,6 +116,7 @@ export default function TopAdminNavResponsive() {
                         }
                     </AnimatePresence>
                 </li>
+
                 {/* FAQ */}
                 <li className='relative z-[100] w-[100%] h-[100%]'>
                     <button 
@@ -137,6 +140,7 @@ export default function TopAdminNavResponsive() {
                         }
                     </AnimatePresence>
                 </li>
+
                 {/* BUSINESS */}
                 <li className='relative z-[100] w-[100%] h-[100%]'>
                     <button 
@@ -160,6 +164,7 @@ export default function TopAdminNavResponsive() {
                         }
                     </AnimatePresence>
                 </li>
+
                 {/* CATEGORY */}
                 <li className='relative z-[100] w-[100%] h-[100%]'>
                     <button 
@@ -183,6 +188,7 @@ export default function TopAdminNavResponsive() {
                         }
                     </AnimatePresence>
                 </li>
+
                 {/* PROVINCES */}
                 <li className='relative z-[100] w-[100%] h-[100%]'>
                     <button 
@@ -206,6 +212,7 @@ export default function TopAdminNavResponsive() {
                         }
                     </AnimatePresence>
                 </li>
+
                 {/* CITY */}
                 <li className='relative z-[100] w-[100%] h-[100%]'>
                     <button 
@@ -229,31 +236,7 @@ export default function TopAdminNavResponsive() {
                         }
                     </AnimatePresence>
                 </li>
-                {/* MEMBERSHIP */}
-                <li className='relative z-[100] w-[100%] h-[100%]'>
-                    <button 
-                        onClick={() => setIsActive( {six: !isActive.six} )}
-                        className={`${isActive.six && "text-white font-semibold"} pb-2 w-[100%] h-[100%]`}>
-                        Memberships
-                    </button>
-                    <AnimatePresence>
-                        {isActive.six &&
-                        /*  */
-                        <motion.ul 
-                            variants={variants} 
-                            initial='hidden'
-                            animate='visible'
-                            exit="hidden" 
-                            className='text-gray-200 text-sm relative w-[100%] drop-shadow bg-slate-950'>
-                            <li className='px-2 py-2 hover:bg-black flex items-center justify-center'>
-                                <Link href="/admin/membership" className='text-center'>Mmebership List</Link>
-                            </li>
-                        </motion.ul>
-                        }
-                    </AnimatePresence>
-                </li>
-
-
+               
                 {/*SUBSCRIPTIONS */}
                 <li className='relative z-[100] w-[100%] h-[100%]'>
                     <button 
@@ -277,6 +260,7 @@ export default function TopAdminNavResponsive() {
                         }
                     </AnimatePresence>
                 </li>
+
                 {/* MESSAGE */}
                 <li className='relative z-[100] w-[100%] h-[100%]'>
                     <button 
@@ -300,9 +284,6 @@ export default function TopAdminNavResponsive() {
                         }
                     </AnimatePresence>
                 </li>
-
-                
-
 
             </ul>
         </motion.div>

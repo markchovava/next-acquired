@@ -6,14 +6,12 @@ import { CiSearch } from "react-icons/ci";
 import { baseURL } from '@/apis/BaseURL';
 import Image from 'next/image';
 import { MainContextState } from '@/contexts/MainContext';
-import { businessListAction, businessPaginateAction, businessSearchCityCategoryAction, businessSortListAction } from '@/actions/BusinessActions';
+import { businessListAction, businessPaginateAction, 
+    businessSearchCityCategoryAction, businessSortListAction } from '@/actions/BusinessActions';
 
 
 
 export default function Home({dbData, citiesData, categoriesData}) {
-    console.log('dbData', dbData)
-    console.log('citiesData', citiesData)
-    console.log('categoriesData', categoriesData)
     const {businessState, businessDispatch,} = MainContextState();
     const [data, setData] = useState({
         category_id: '',
@@ -80,7 +78,7 @@ export default function Home({dbData, citiesData, categoriesData}) {
         const category_id = data?.category_id;
         try{
             const res = await businessSearchCityCategoryAction(city_id, category_id, search);
-            console.log('res', res)
+            //console.log('res', res)
             businessDispatch({type: 'ADD_DATA', payload: {
                 items: res?.data,
                 prevURL: res?.links?.prev,
@@ -213,30 +211,27 @@ export default function Home({dbData, citiesData, categoriesData}) {
     {/* LIST */}
     {businessState?.items?.length > 0 ? 
     <section className='mx-auto w-[90%] grid lg:grid-cols-3 grid-cols-1 gap-12 pt-[2rem] pb-[3rem]'>
-        { businessState?.items?.length > 0 &&
-            businessState?.items?.map((i) =>
-            <div key={i?.id} className='flex-1 bg-white drop-shadow hover:drop-shadow-lg transition-all ease-linear duration-100 p-6 rounded-xl'>
-                <div className='rounded-xl w-[100%] bg-slate-200 aspect-[4/3] overflow-hidden mb-6'>
+        { businessState?.items?.map((i, key) => (
+             <div key={i?.id} className='flex-1 bg-white drop-shadow hover:drop-shadow-lg transition-all ease-linear duration-100 p-6 rounded-xl'>
+                <div className='relative rounded-xl w-[100%] bg-slate-200 aspect-[4/3] overflow-hidden mb-6'>
                     <Image
-                        /* fill */
-                        width={400}
-                        height={300}
+                        fill
                         style={{ objectFit: 'cover' }} 
-                        src={i?.image ? baseURL + i?.image : './assets/img/no-img.png'} 
+                        src={`/assets/img/no-img.jpg`} 
                         alt={i?.name}
                     /> 
                 </div>
                 {/*  */}
                 <div className='grid grid-cols-3 gap-2'>
                     <div className='col-span-2'>    
-                        {  i?.categories && 
+                        { i?.categories && 
                             i?.categories.map((a) => (
                             <span
                                 key={a?.id}  
                                 className='rounded-lg py-3 px-2 bg-amber-400 mr-2'>
                                 {a?.name}
                             </span>
-                        ))} 
+                        )) } 
                     </div>
                     <div className='col-span-1 flex items-center justify-end'>
                         <span className='text-xl font-serif'>
@@ -248,8 +243,7 @@ export default function Home({dbData, citiesData, categoriesData}) {
                 <h3 className='my-10 font-serif text-[2rem] leading-tight'>{i?.name}</h3>
                 {/*  */}
                 <div className='flex justify-between items-center'>
-                    <p
-                        className='text-xl font-serif'>
+                    <p className='text-xl font-serif'>
                         { i?.city?.name ? i?.city?.name : 'Undisclosed' }
                     </p>
                     <Link 
@@ -259,10 +253,11 @@ export default function Home({dbData, citiesData, categoriesData}) {
                         <FaArrowRightLong className="ease-linear transition-all duration-100 group-hover:translate-x-1" />
                     </Link>
                 </div>
-            </div>
-        )}
+
+             </div>
+        )) }
     </section>
-    :
+    : 
     <section className='mx-auto w-[90%] pt-[2rem] pb-[3rem]'>
         <h3 className='w-[100%] text-[3rem] font-light'>No Data Available at the moment.</h3>    
     </section>

@@ -112,7 +112,7 @@ export default function Home({dbData, citiesData, categoriesData}) {
   return (
     <>
         
-    {/* HEADER */}
+     {/* HEADER */}
     <section className='w-full bg-gray-100'>
         <form 
             action={getSearchData} 
@@ -213,8 +213,7 @@ export default function Home({dbData, citiesData, categoriesData}) {
     {/* LIST */}
     {businessState?.items?.length > 0 ? 
     <section className='mx-auto w-[90%] grid lg:grid-cols-3 grid-cols-1 gap-12 pt-[2rem] pb-[3rem]'>
-        { businessState?.items?.length > 0 &&
-            businessState?.items?.map((i) =>
+        { businessState?.items?.map((i) =>
             <div key={i?.id} className='flex-1 bg-white drop-shadow hover:drop-shadow-lg transition-all ease-linear duration-100 p-6 rounded-xl'>
                 <div className='rounded-xl w-[100%] bg-slate-200 aspect-[4/3] overflow-hidden mb-6'>
                     <Image
@@ -268,7 +267,6 @@ export default function Home({dbData, citiesData, categoriesData}) {
     </section>
     }
 
-
     {/* PAGINATION */}
     <section className='w-[90%] mx-auto pb-[4rem] flex items-center justify-end gap-3'>
         {/* PREVIOUS */}
@@ -291,7 +289,6 @@ export default function Home({dbData, citiesData, categoriesData}) {
         }
     </section>
         
-
     </>
   )
 }

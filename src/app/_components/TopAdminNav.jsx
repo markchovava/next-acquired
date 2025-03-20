@@ -4,9 +4,7 @@ import Link from 'next/link'
 import { AnimatePresence, motion } from 'framer-motion'
 import { FaHome } from "react-icons/fa";
 import TopAdminNavResponsive from './TopAdminNavResponsive';
-import { cookieRoleClient } from '@/cookies/cookieRoleClient';
 import { getCookie } from 'cookies-next';
-
 
 const variants = {
     hidden: { opacity: 0},
@@ -17,7 +15,6 @@ const variants = {
 
 
 export default function TopAdminNav() {
-    const {getRoleCookie, cookieRoleName } = cookieRoleClient()
     const [isActive, setIsActive] = useState({
         zero: false,
         one: false,
@@ -37,6 +34,7 @@ export default function TopAdminNav() {
   return (
     <>
     {adminToken == 'Yes' &&
+    <>
     <section className='w-[100%] bg-slate-900 text-gray-300'>
         <div className='hidden lg:flex mx-auto w-[90%] py-3 items-center justify-between'>
             <ul className='lg:w-auto flex items-center lg:justify-start gap-6'>
@@ -53,7 +51,7 @@ export default function TopAdminNav() {
                 </li>
 
                 {/* SETTINGS */}
-                <li className='relative z-[100] w-[100%] h-[100%]'>
+                <motion.li className='relative z-[100] w-[100%] h-[100%]'>
                     <button 
                         onClick={() => setIsActive( {eight: !isActive.eight} )}
                         className={`${isActive.eight && "text-white font-semibold"} w-[100%] h-[100%]`}>
@@ -77,7 +75,7 @@ export default function TopAdminNav() {
                         </motion.ul>
                         }
                     </AnimatePresence>
-                </li>
+                </motion.li>
 
                 {/* USER */}
                 <li className='relative z-[100] w-[100%] h-[100%]'>
@@ -198,30 +196,6 @@ export default function TopAdminNav() {
                         }
                     </AnimatePresence>
                 </li>
-
-                {/* MEMBERSHIP */}
-                <li className='relative z-[100] w-[100%] h-[100%]'>
-                    <button 
-                        onClick={() => setIsActive( {six: !isActive.six} )}
-                        className={`${isActive.six && "text-white font-semibold"} w-[100%] h-[100%]`}>
-                        Membership
-                    </button>
-                    <AnimatePresence>
-                        {isActive.six &&
-                        /*  */
-                        <motion.ul 
-                            variants={variants} 
-                            initial='hidden'
-                            animate='visible'
-                            exit="hidden" 
-                            className='text-gray-200 text-sm absolute z-10 w-[150%] top-[140%] drop-shadow border border-gray-600 bg-slate-900 rounded-b-lg'>
-                            <li className='px-2 pb-2 hover:bg-slate-950'>
-                                <Link href="/admin/membership">Membership List</Link>
-                            </li>
-                        </motion.ul>
-                        }
-                    </AnimatePresence>
-                </li>
                
                 {/* Subscription */}
                 <li className='relative z-[100] w-[100%] h-[100%]'>
@@ -247,7 +221,7 @@ export default function TopAdminNav() {
                     </AnimatePresence>
                 </li>
 
-                {/* Subscription */}
+                {/* MESSAGE */}
                 <li className='relative z-[100] w-[100%] h-[100%]'>
                     <button 
                         onClick={() => setIsActive( {nine: !isActive.nine} )}
@@ -273,10 +247,9 @@ export default function TopAdminNav() {
 
             </ul>
         </div>
-
-        <TopAdminNavResponsive />
-
     </section>
+    <TopAdminNavResponsive />
+    </>
     }
 
     </>

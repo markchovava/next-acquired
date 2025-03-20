@@ -81,17 +81,6 @@ export default async function page() {
               </h3>
             </div>
           </Link>
-          {/* PARTNERS */}
-          <Link href="/admin/partner">
-            <div className='border border-blue-300 text-green-400 bg-white hover:drop-shadow-lg py-[1.5rem] transition-all ease-linear duration-200'>
-              <div className='flex items-center justify-center mb-4'>
-                <FaRegHandshake className='text-[6rem] ' />
-              </div>
-              <h3 className='text-lg text-center flex justify-center items-center'>
-                Partners
-              </h3>
-            </div>
-          </Link>
           {/* ROLES */}
           <Link href="/admin/role">
             <div className='border border-purple-300 text-purple-400 bg-white hover:drop-shadow-lg py-[1.5rem] transition-all ease-linear duration-200'>
@@ -114,6 +103,7 @@ export default async function page() {
               </h3>
             </div>
           </Link>
+
           {/* BUSINESS */}
           <Link href="/admin/business">
             <div className='border border-pink-300 text-pink-400 bg-white hover:drop-shadow-lg py-[1.5rem] transition-all ease-linear duration-200'>
@@ -125,6 +115,7 @@ export default async function page() {
               </h3>
             </div>
           </Link>
+
           {/* CITIES */}
           <Link href="/admin/city">
             <div className='border border-emerald-300 text-emerald-400 bg-white hover:drop-shadow-lg py-[1.5rem] transition-all ease-linear duration-200'>
@@ -136,6 +127,7 @@ export default async function page() {
               </h3>
             </div>
           </Link>
+
           {/* PROVINCES */}
           <Link href="/admin/province">
             <div className='border border-lime-300 text-lime-400 bg-white hover:drop-shadow-lg py-[1.5rem] transition-all ease-linear duration-200'>
@@ -147,6 +139,7 @@ export default async function page() {
               </h3>
             </div>
           </Link>
+
           {/* CATEGORY */}
           <Link href="/admin/category">
             <div className='border border-red-300 text-red-400 bg-white hover:drop-shadow-lg py-[1.5rem] transition-all ease-linear duration-200'>
@@ -170,6 +163,20 @@ export default async function page() {
               </h3>
             </div>
           </Link>
+
+          {/* MESSAGE */}
+          <Link href="/admin/message/business">
+            <div className='border border-teal-300 text-teal-400 bg-white hover:drop-shadow-lg py-[1.5rem] transition-all ease-linear duration-200'>
+              <div className='flex items-center justify-center mb-4'>
+                <FaMessage className='text-[6rem] ' />
+              </div>
+              <h3 className='text-lg text-center flex justify-center items-center'>
+                Message
+              </h3>
+            </div>
+          </Link>
+
+
         </section>
 
       </div>
