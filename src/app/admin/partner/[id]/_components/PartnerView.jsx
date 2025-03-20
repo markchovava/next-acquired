@@ -35,7 +35,7 @@ export default function PartnerView({id, dbData }) {
                     <Image
                         fill
                         style={{ objectFit: 'cover' }} 
-                        src={baseURL + data?.image} 
+                        src={data?.image ? (baseURL + data?.image) : `/assets/img/no-img.jpg`} 
                         alt={data?.name}
                     />
                 </div>

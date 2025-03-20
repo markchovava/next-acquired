@@ -217,7 +217,7 @@ export default function Home({dbData, citiesData, categoriesData}) {
                     <Image
                         fill
                         style={{ objectFit: 'cover' }} 
-                        src={`/assets/img/no-img.jpg`} 
+                        src={i?.image ? (baseURL + i?.image) : `/assets/img/no-img.jpg`} 
                         alt={i?.name}
                     /> 
                 </div>
