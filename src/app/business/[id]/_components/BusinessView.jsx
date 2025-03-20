@@ -95,11 +95,11 @@ export default function BusinessView({id, dbData}) {
         </div>
         <div className='mx-auto w-[90%] flex lg:flex-row flex-col justify-start items-start gap-10'>
             <div className="lg:w-[60%] w-[100%]">
-                <div className='w-[100%] aspect-[5/3] overflow-hidden bg-gray-400 rounded-xl drop-shadow-lg mb-4'>
+                <div className='relative w-[100%] aspect-[5/3] overflow-hidden bg-gray-400 rounded-xl drop-shadow-lg mb-4'>
                     <Image
                         fill
                         style={{ objectFit: 'cover' }} 
-                        src={data?.image ? baseURL + data?.image : './assets/img/no-img.png' } 
+                        src={data?.image ? (baseURL + data?.image) : '/assets/img/no-img.jpg' } 
                         alt={data?.name}
                     />
                 </div>
