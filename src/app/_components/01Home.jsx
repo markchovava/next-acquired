@@ -11,7 +11,7 @@ import { businessListAction, businessPaginateAction, businessSearchCityCategoryA
 
 
 export default function Home({dbData, citiesData, categoriesData}) {
-    console.log('dbData', dbData)
+    console.log('businessesData', businessesData)
     console.log('citiesData', citiesData)
     console.log('categoriesData', categoriesData)
     const {businessState, businessDispatch,} = MainContextState();
@@ -268,6 +268,7 @@ export default function Home({dbData, citiesData, categoriesData}) {
     </section>
     }
 
+
     {/* PAGINATION */}
     <section className='w-[90%] mx-auto pb-[4rem] flex items-center justify-end gap-3'>
         {/* PREVIOUS */}
@@ -289,6 +290,7 @@ export default function Home({dbData, citiesData, categoriesData}) {
         </button>
         }
     </section>
+        
 
     </>
   )

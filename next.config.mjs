@@ -8,7 +8,7 @@ const nextConfig = {
     },
     experimental: {
       serverActions: {
-        bodySizeLimit: '10mb',
+        bodySizeLimit: '30mb',
       },
     },
     images: {
@@ -23,8 +23,17 @@ const nextConfig = {
           hostname: 'localhost',
           pathname: '/**',
         },
+        {
+          protocol: 'http',
+          hostname: '143.110.255.30',
+          pathname: '/**',
+        },
       ],
-      domains: ['127.0.0.1', 'localhost'], // Add your domains here
+      domains: [
+        '127.0.0.1', 
+        'localhost', 
+        '143.110.255.30'
+      ], // Add your domains here
     },
 };
 

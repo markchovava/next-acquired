@@ -11,17 +11,16 @@ export default async function page() {
         businessListAction(),  
         cityListAllAction(), 
         categoryListAllAction(),
-  ]);
-  
+      ]);
+
   
     return (
     <>
-    <Home
-        dbData={businessesData}
-        provincesData={provincesData}
-        citiesData={citiesData}
-        categoriesData={categoriesData}
-    />
+      <Home
+          dbData={businessesData}
+          citiesData={citiesData}
+          categoriesData={categoriesData}
+      />
     </>
   )
 }

@@ -2,12 +2,12 @@ import Link from 'next/link'
 import React from 'react'
 import { FaAngleRight } from 'react-icons/fa6'
 import { _provinceListAction } from '@/actions/ProvinceActions'
-import { businessMessageListAction } from '@/actions/BusinessMessageActions'
+import { _businessMessageListAction, } from '@/actions/BusinessMessageActions'
 import BusinessMessageList from './components/BusinessMessageList'
 
 
 export default async function page() {
-  const [businessMessageData, ] = await Promise.all([businessMessageListAction(), ])
+  const [businessMessageData, ] = await Promise.all([_businessMessageListAction(), ])
   
   return (
     <>
