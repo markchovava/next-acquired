@@ -107,9 +107,28 @@ export async function businessViewAction(id) {
   return await res.json();
 }
 
+/* ---------------------- AUTHENTICATION ----------------------- */
 
-
-/* --------------------------------------------- */
+export async function _businessStatusAction(data) {
+  const cookieStore = await cookies();
+  const authToken = await cookieStore.get('ACQUIREDZW_AUTH_COOKIE');
+  if(!authToken?.value){ redirect('/login'); }
+  const res = await fetch(`${baseURL}api/business-status`, {
+    'method': 'POST',
+    'body': JSON.stringify(data),
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${authToken?.value}`,
+    }
+  });
+  revalidatePath('/');
+  revalidatePath('/admin/business');
+  revalidatePath('/client/business');
+  revalidatePath(`/admin/business/${data?.id}`);
+  revalidatePath(`/client/business/${data?.id}`);
+  return await res.json();
+}
 
 export async function _businessListByUserAction() {
   const cookieStore = await cookies();

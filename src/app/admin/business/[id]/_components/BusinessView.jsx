@@ -5,6 +5,7 @@ import { baseURL } from '@/apis/BaseURL';
 import Image from 'next/image';
 import { _businessViewAction } from '@/actions/BusinessActions';
 import Link from 'next/link';
+import { formatNumber } from '@/utils/formatNumber';
 
 
 
@@ -56,6 +57,13 @@ export default function BusinessView({id, dbData, citiesData, provincesData}) {
             </div>
             {/*  */}
             <div className='mb-6'>
+                <p className='text-sm font-semibold mb-1'>Status:</p>
+                <p className='text-lg'>
+                    <span className='bg-green-200 py-1 px-2 rounded-lg'>{data?.status}</span>
+                </p>
+            </div>
+            {/*  */}
+            <div className='mb-6'>
                 <p className='text-sm font-semibold'>Address:</p>
                 <p className='text-lg'>{data?.address}</p>
             </div>
@@ -84,7 +92,9 @@ export default function BusinessView({id, dbData, citiesData, provincesData}) {
             {/*  */}
             <div className='mb-6'>
                 <p className='text-sm font-semibold'>Asking Price:</p>
-                <p className='text-lg'>{data?.price}</p>
+                <p className='text-lg'>
+                    {data?.price ? '$' + formatNumber(data?.price) : 'Not Added.'}
+                </p>
             </div>
             {/* DESCRIPTION */}
             <div className='mb-6'>

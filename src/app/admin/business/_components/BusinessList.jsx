@@ -10,7 +10,8 @@ import { IoSearch } from 'react-icons/io5';
 import { reactToastifyDark } from '@/utils/reactToastify';
 import { toast } from 'react-toastify';
 import { TbCategoryPlus } from "react-icons/tb";
-
+import { GrStatusGood } from "react-icons/gr";
+import { formatNumber } from '@/utils/formatNumber';
 
 export default function BusinessList({dbData, citiesData, provincesData}) {
     const [status, setStatus] = useState('');
@@ -186,20 +187,23 @@ export default function BusinessList({dbData, citiesData, provincesData}) {
                             : '' }
                         </div>
                         <div className='w-[20%] border-r border-gray-300 px-3 py-2'>
-                            {i?.price ? i?.price : 'Not Added.'}
+                            {i?.price ? '$' + formatNumber(i?.price) : 'Not Added.'}
                         </div>
                         <div className='w-[20%] border-r border-gray-300 px-3 py-2'>
-                            <span className='bg-blue-200 px-2 py-1 rounded-lg drop-shadow'>{i?.status}</span>
+                            <span className='bg-green-200 px-2 py-1 rounded-lg drop-shadow'>{i?.status}</span>
                         </div>
                         <div className='w-[20%] border-r border-gray-300 px-3 py-2'>
                             {i?.user?.name ? i?.user?.name : (i?.user?.email ? i?.user?.email : 'Not Added.')}
                         </div>
                         <div className='w-[15%] px-3 py-2 text-end flex items-center justify-end gap-3 text-xl'>
                             <Link title='View' href={`/admin/business/category/${i?.id}`}> 
-                            <TbCategoryPlus className='hover:text-green-500 duration-150 hover:scale-110 transition-all ease-in'/> 
+                                <TbCategoryPlus className='hover:text-green-500 duration-150 hover:scale-110 transition-all ease-in' /> 
                             </Link> 
+                            <Link href={`/admin/business/status/${i?.id}`}>
+                                <GrStatusGood className='hover:text-violet-500 duration-150 hover:scale-110 transition-all ease-in' />
+                            </Link>
                             <Link title='View' href={`/admin/business/${i?.id}`}> 
-                            <FaEye className='hover:text-blue-500 duration-150 hover:scale-110 transition-all ease-in'/> 
+                                <FaEye className='hover:text-blue-500 duration-150 hover:scale-110 transition-all ease-in'/> 
                             </Link> 
                             <button title='Delete' onClick={() => deleteData(i?.id)}> 
                                 <MdDeleteForever
