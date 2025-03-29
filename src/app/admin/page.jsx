@@ -14,10 +14,19 @@ import { FaInfoCircle } from "react-icons/fa";
 import { FaRegHandshake } from "react-icons/fa6";
 import { _businessMessageIndexAllByStatusAction } from '@/actions/BusinessMessageActions';
 import { FaMessage } from "react-icons/fa6";
+import ClientRedirect from '../_components/ClientRedirect';
+import { redirect } from 'next/navigation';
+import { cookies } from 'next/headers';
 
 
 
 export default async function page() {
+  const cookieStore = await cookies();
+  const adminCookie = await cookieStore.get('ACQUIREDZW_ADMIN_COOKIE');
+  if(!adminCookie?.value){ redirect('/login') }
+  if(adminCookie?.value != 'Yes'){ return <ClientRedirect /> }
+
+  /* BUSINESS MESSAGE */
   const status = 'Unread';
   const [businessMessageData, ] = await Promise.all([_businessMessageIndexAllByStatusAction(status)]);
 

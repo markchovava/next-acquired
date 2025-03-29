@@ -80,6 +80,18 @@ export default async function page() {
               </h3>
             </div>
           </Link>
+
+          {/* MESSAGE */}
+          <Link href="/client/message/business">
+            <div className='border border-teal-300 text-teal-400 bg-white hover:drop-shadow-lg py-[1.5rem] transition-all ease-linear duration-200'>
+              <div className='flex items-center justify-center mb-4'>
+                <FaMessage className='text-[6rem] ' />
+              </div>
+              <h3 className='text-lg text-center flex justify-center items-center'>
+                Message
+              </h3>
+            </div>
+          </Link>
          
           
         </section>

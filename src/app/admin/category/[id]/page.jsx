@@ -3,11 +3,19 @@ import React from 'react'
 import { FaAngleRight } from 'react-icons/fa6'
 import CategoryView from './_components/CategoryView'
 import { _categoryViewAction } from '@/actions/CategoryActions'
+import ClientRedirect from '@/app/_components/ClientRedirect'
+import { cookies } from 'next/headers'
+import { redirect } from 'next/navigation'
 
 
 
 
 export default async function page({ params: { id } }) {
+  const cookieStore = await cookies();
+  const adminCookie = await cookieStore.get('ACQUIREDZW_ADMIN_COOKIE');
+  if(!adminCookie?.value){ redirect('/login') }
+  if(adminCookie?.value != 'Yes'){ return <ClientRedirect /> }
+  /*  */
   const [categoryData, ] = await Promise.all([_categoryViewAction(id), ])
 
   return (

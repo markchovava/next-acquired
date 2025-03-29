@@ -13,7 +13,9 @@ import { FaUser } from "react-icons/fa6";
 import { GiHamburgerMenu } from 'react-icons/gi';
 import { RiLoginBoxLine } from "react-icons/ri";
 import { toast } from 'react-toastify';
-
+import { PiPasswordBold } from "react-icons/pi";
+import { RiDashboard3Line } from "react-icons/ri";
+import { MdOutlineMailOutline } from "react-icons/md";
 
 
 const ulVariant = {
@@ -22,8 +24,6 @@ const ulVariant = {
         opacity: 1, y: 0,
         transition: {type: 'spring', duration: 1} },
 }
-
-
 
 export default function HeaderAuthLinks() {
     const authToken = getCookie('ACQUIREDZW_AUTH_COOKIE');
@@ -72,6 +72,7 @@ export default function HeaderAuthLinks() {
                 className='absolute top-[100%] right-0 z-50 bg-white drop-shadow-md rounded-lg overflow-hidden'>
                 { authToken ?
                 <>
+                    {/* PROFILE */}
                     <li className='w-[100%] px-3 py-2 text-slate-800 hover:bg-gray-100 mb-2'>
                         <Link 
                         href={`/${adminToken == 'Yes' ? 'admin' : 'client'}/profile`} 
@@ -80,31 +81,48 @@ export default function HeaderAuthLinks() {
                             <span>Profile</span>
                         </Link>
                     </li>
-                    { adminToken == 'No' &&
+                    {/* DASHBOARD */}
                     <li className='w-[100%] px-3 py-2 text-slate-800 hover:bg-gray-100'>
-                        <Link href='/client' 
+                        <Link href={adminToken == 'No' ? '/client' : '/admin'} 
                             className='flex items-center justify-between gap-6'>
-                            <RiLoginBoxLine className='text-[1.5rem]' />
+                            <RiDashboard3Line className='text-[1.5rem]' />
                             <span>Dashboard</span>
                         </Link>
                     </li>
-                    }
+                    {/* EMAIL */}
+                    <li className='w-[100%] px-3 py-2 text-slate-800 hover:bg-gray-100'>
+                        <Link href={adminToken == 'No' ? '/client/email' : '/admin/email'} 
+                            className='flex items-center justify-between gap-6'>
+                            <MdOutlineMailOutline className='text-[1.5rem]' />
+                            <span>Email</span>
+                        </Link>
+                    </li>
+                    {/* PASSWORD */}
+                    <li className='w-[100%] px-3 py-2 text-slate-800 hover:bg-gray-100'>
+                        <Link href={adminToken == 'No' ? '/client/password' : '/admin/password'} 
+                            className='flex items-center justify-between gap-6'>
+                            <PiPasswordBold className='text-[1.5rem]' />
+                            <span>Password</span>
+                        </Link>
+                    </li>
+                    {/* LOGOUT */}
                     <li className='w-[100%] px-3 py-2 text-slate-800 hover:bg-gray-100'>
                         <button onClick={postLogout} 
-                            className='flex items-center justify-between gap-6'>
+                            className='w-[100%] flex items-center justify-between gap-6'>
                             <RiLoginBoxLine className='text-[1.5rem]' />
                             <span>Logout</span>
                         </button>
                     </li>
                 </>
                 :
+                <>
                 <li className='w-[100%] px-3 py-2 text-slate-800 hover:bg-gray-100'>
                     <Link href="/login" className='flex items-center justify-between gap-6'>
                     <RiLoginBoxLine className='text-[1.5rem]' />
                     <span>Login</span>
                     </Link>
-                </li>
-                
+                </li>   
+                </>
                 }
 
             </motion.ul>

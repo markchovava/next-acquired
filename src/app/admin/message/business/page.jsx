@@ -4,9 +4,17 @@ import { FaAngleRight } from 'react-icons/fa6'
 import { _provinceListAction } from '@/actions/ProvinceActions'
 import { _businessMessageListAction, } from '@/actions/BusinessMessageActions'
 import BusinessMessageList from './components/BusinessMessageList'
+import { cookies } from 'next/headers'
+import { redirect } from 'next/navigation'
+import ClientRedirect from '@/app/_components/ClientRedirect'
 
 
 export default async function page() {
+  const cookieStore = await cookies();
+  const adminCookie = await cookieStore.get('ACQUIREDZW_ADMIN_COOKIE');
+  if(!adminCookie?.value){ redirect('/login') }
+  if(adminCookie?.value != 'Yes'){ return <ClientRedirect /> }
+  /*  */
   const [businessMessageData, ] = await Promise.all([_businessMessageListAction(), ])
   
   return (
@@ -23,7 +31,7 @@ export default async function page() {
 
         </ul>
       </div>
-     </section>
+    </section>
 
     <section className='w-[100%] pt-[2rem]'>
         <div className='mx-auto w-[90%]'>

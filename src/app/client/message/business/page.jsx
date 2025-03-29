@@ -2,12 +2,12 @@ import Link from 'next/link'
 import React from 'react'
 import { FaAngleRight } from 'react-icons/fa6'
 import { _provinceListAction } from '@/actions/ProvinceActions'
-import { _businessMessageListAction, } from '@/actions/BusinessMessageActions'
+import { _businessMessageIndexByUserAction, } from '@/actions/BusinessMessageActions'
 import BusinessMessageList from './components/BusinessMessageList'
 
 
 export default async function page() {
-  const [businessMessageData, ] = await Promise.all([_businessMessageListAction(), ])
+  const [businessMessageData, ] = await Promise.all([_businessMessageIndexByUserAction(), ])
   
   return (
     <>
@@ -17,9 +17,9 @@ export default async function page() {
         <ul className='flex items-center justify-start gap-2 text-sm'>
           <li><Link href="/">Home</Link></li>
           <li><FaAngleRight /></li>
-          <li><Link href="/admin">Dashboard</Link></li>
+          <li><Link href="/client">Dashboard</Link></li>
           <li><FaAngleRight /></li>
-          <li><Link href="/admin/message/business" className='font-bold '>Business Message List</Link></li>
+          <li><Link href="/client/message/business" className='font-bold '>Business Message List</Link></li>
 
         </ul>
       </div>

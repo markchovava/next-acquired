@@ -3,9 +3,17 @@ import React from 'react'
 import { FaAngleRight } from 'react-icons/fa6'
 import RoleList from './_components/RoleList'
 import { _roleListAction } from '@/actions/RoleActions'
+import { cookies } from 'next/headers'
+import { redirect } from 'next/navigation'
+import ClientRedirect from '@/app/_components/ClientRedirect'
 
 
 export default async function page() {
+  const cookieStore = await cookies();
+  const adminCookie = await cookieStore.get('ACQUIREDZW_ADMIN_COOKIE');
+  if(!adminCookie?.value){ redirect('/login') }
+  if(adminCookie?.value != 'Yes'){ return <ClientRedirect /> }
+  /*  */
   const [rolesData] = await Promise.all([_roleListAction(), ])
   return (
     <>

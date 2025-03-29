@@ -3,11 +3,19 @@ import React from 'react'
 import { FaAngleRight } from 'react-icons/fa6'
 import ProvinceView from './_components/ProvinceView'
 import { _provinceViewAction } from '@/actions/ProvinceActions'
+import { cookies } from 'next/headers'
+import { redirect } from 'next/navigation'
+import ClientRedirect from '@/app/_components/ClientRedirect'
 
 
 
 
 export default async function page({ params: {id} }) {
+  const cookieStore = await cookies();
+  const adminCookie = await cookieStore.get('ACQUIREDZW_ADMIN_COOKIE');
+  if(!adminCookie?.value){ redirect('/login') }
+  if(adminCookie?.value != 'Yes'){ return <ClientRedirect /> }
+  /*  */
   const [provinceData, ] = await Promise.all([_provinceViewAction(id), ])
 
   return (

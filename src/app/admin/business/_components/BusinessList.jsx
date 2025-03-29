@@ -5,7 +5,7 @@ import { FaArrowLeftLong, FaArrowRightLong, FaEye } from 'react-icons/fa6';
 import { MdDeleteForever, MdEdit } from 'react-icons/md';
 import BusinessAddModal from './BusinessAddModal';
 import { AdminContextState } from '@/contexts/AdminContext';
-import { _businessDeleteAction, _businessListAction, _businessSearchAction } from '@/actions/BusinessActions';
+import { _businessByStatusAction, _businessDeleteAction, _businessListAction, _businessSearchAction } from '@/actions/BusinessActions';
 import { IoSearch } from 'react-icons/io5';
 import { reactToastifyDark } from '@/utils/reactToastify';
 import { toast } from 'react-toastify';
@@ -13,6 +13,7 @@ import { TbCategoryPlus } from "react-icons/tb";
 
 
 export default function BusinessList({dbData, citiesData, provincesData}) {
+    const [status, setStatus] = useState('');
     const {businessState, businessDispatch } = AdminContextState()
     const [isModal, setIsModal] = useState(false)
     const [search, setSearch] = useState('');
@@ -60,6 +61,33 @@ export default function BusinessList({dbData, citiesData, provincesData}) {
                 setIsSearch(false)
             }
     }
+
+    async function getStatusData() {
+        console.log("status", status)
+        if(!status) {
+            await getData();
+            return;
+        }
+        if(status == 'All') {
+            await getData();
+            return;
+        }
+        try{
+            const res = await _businessByStatusAction(status);
+            console.log("res", res)
+            businessDispatch({type: 'ADD_DATA', payload: {
+                items: res?.data,
+                prevURL: res?.links?.prev,
+                nextURL: res?.links?.next,
+            }});
+            setIsSearch(false);
+            } catch (error) {
+                console.error(`Error: ${error}`); 
+                setIsSearch(false)
+            }
+    }
+
+    useEffect(() => { getStatusData() }, [status])
 
     async function getData() {
         try{
@@ -112,7 +140,18 @@ export default function BusinessList({dbData, citiesData, provincesData}) {
                     }
                 </button>
             </form>
-            <div>
+            <div className='flex items-center justify-end gap-3'>
+                <select 
+                    name='status' 
+                    value={status}
+                    onChange={(e) => setStatus(e?.target?.value)} 
+                    className='px-4 py-3 outline-none border border-gray-300'>
+                    <option value=''>Select an option</option>
+                    <option value='All'>All</option>
+                    <option value='Active'>Active</option>
+                    <option value='Archived'>Archived</option>
+                    <option value='Posted'>Posted</option>
+                </select>
                 <button 
                     onClick={() => setIsModal(!isModal)}
                     className='px-5 py-3 border border-gray-300 hover:bg-gray-900 hover:text-white transition-color ease-linear duration-200'>
@@ -128,7 +167,7 @@ export default function BusinessList({dbData, citiesData, provincesData}) {
                 <div className='mx-auto w-[100%] text-lg py-2 flex items-center justify-start font-bold font-white bg-gray-200 '>
                     <div className='w-[25%] border-r border-white px-3 py-2'>NAME</div>
                     <div className='w-[20%] border-r border-white px-3 py-2'>ASKING PRICE</div>
-                    <div className='w-[20%] border-r border-white px-3 py-2'>CATEGORY</div>
+                    <div className='w-[20%] border-r border-white px-3 py-2'>STATUS</div>
                     <div className='w-[20%] border-r border-white px-3 py-2'>AUTHOR</div>
                     <div className='w-[15%] px-3 py-2 text-end'>ACTION</div>
                 </div>
@@ -137,14 +176,20 @@ export default function BusinessList({dbData, citiesData, provincesData}) {
                 { businessState?.items?.length > 0 ?
                     businessState?.items?.map((i, key) => (
                     <div key={key} className='mx-auto w-[100%] py-2 flex items-center justify-start border-b border-x border-gray-300'>
-                        <div className='w-[25%] border-r border-gray-300 px-3 py-2'>{i?.name ? i?.name : 'Not Added.'}</div>
-                        <div className='w-[20%] border-r border-gray-300 px-3 py-2'>{i?.price ? i?.price : 'Not Added.'}</div>
+                        <div className='w-[25%] border-r border-gray-300 px-3 py-2'>
+                            <p>{i?.name ? i?.name : 'Not Added.'}</p>
+                            { i?.categories?.length > 0 
+                            ? 
+                            <p className='text-sm italic text-green-800'>
+                                {i?.categories.map((a) => (a.name + ', '))}
+                            </p>
+                            : '' }
+                        </div>
                         <div className='w-[20%] border-r border-gray-300 px-3 py-2'>
-                            {i?.categories?.length > 0 ?
-                             i?.categories.map((a) => (a.name + ', '))
-                             :
-                             'Not Added.'
-                            }
+                            {i?.price ? i?.price : 'Not Added.'}
+                        </div>
+                        <div className='w-[20%] border-r border-gray-300 px-3 py-2'>
+                            <span className='bg-blue-200 px-2 py-1 rounded-lg drop-shadow'>{i?.status}</span>
                         </div>
                         <div className='w-[20%] border-r border-gray-300 px-3 py-2'>
                             {i?.user?.name ? i?.user?.name : (i?.user?.email ? i?.user?.email : 'Not Added.')}
@@ -164,16 +209,16 @@ export default function BusinessList({dbData, citiesData, provincesData}) {
                     </div>
                 ))
                 : 
-                    <section className='w-[100%] py-6'>
-                        <h3 className='text-[3rem] font-light'>No Data Available at the moment.</h3>
-                        <p>Click 
-                            <span className='cursor-pointer underline hover:no-underline mx-1' 
-                                onClick={() => setIsModal(!isModal)}>
-                                here
-                            </span> 
-                            to add.
-                        </p>
-                    </section>
+                <section className='w-[100%] py-6'>
+                    <h3 className='text-[3rem] font-light'>No Data Available at the moment.</h3>
+                    <p>Click 
+                        <span className='cursor-pointer underline hover:no-underline mx-1' 
+                            onClick={() => setIsModal(!isModal)}>
+                            here
+                        </span> 
+                        to add.
+                    </p>
+                </section>
                 }
             </section>
         </section>

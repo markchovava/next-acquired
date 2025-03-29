@@ -4,12 +4,19 @@ import { FaAngleRight } from 'react-icons/fa6'
 import CityList from './_components/CityList'
 import { _cityListAction } from '@/actions/CityActions'
 import { _provinceListAllAction } from '@/actions/ProvinceActions'
-
-
+import { cookies } from 'next/headers'
+import { redirect } from 'next/navigation'
+import ClientRedirect from '@/app/_components/ClientRedirect'
 
 
 export default async function page() {
-  const [citiesData, provincesData] = await Promise.all([_cityListAction(), _provinceListAllAction()])
+  const cookieStore = await cookies();
+  const adminCookie = await cookieStore.get('ACQUIREDZW_ADMIN_COOKIE');
+  if(!adminCookie?.value){ redirect('/login') }
+  if(adminCookie?.value != 'Yes'){ return <ClientRedirect /> }
+  /*  */
+  const [citiesData, provincesData] = await Promise.all([
+        _cityListAction(), _provinceListAllAction()])
 
   return (
     <>

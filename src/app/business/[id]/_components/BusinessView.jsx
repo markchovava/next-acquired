@@ -18,6 +18,8 @@ export default function BusinessView({id, dbData}) {
     const [errMsg, setErrMsg] = useState({})
     const [isRes, setIsRes] = useState(false)
     const [input, setInput] = useState({
+        business_id:  id,
+        user_id: null,
         name: '',
         phone: '',
         email: '',
@@ -53,6 +55,7 @@ export default function BusinessView({id, dbData}) {
         }
         const formData = {
             business_id: id,
+            user_id: data?.user_id,
             name: input?.name,
             phone: input?.phone,
             email: input?.email,

@@ -65,9 +65,14 @@ export default function LoginEdit() {
                         setErrMsg({});
                         return;
                     }
+                    else if(res?.data?.is_admin == 'No'){
+                        router.push('/client');
+                        setErrMsg({});
+                        return;
+                    }
                 }
+                toast.warn('Something went wrong, please try again.', reactToastifyDark);
                 setErrMsg({});
-                router.push('/client');
                 setIsSubmit(false);
                 return;
             }

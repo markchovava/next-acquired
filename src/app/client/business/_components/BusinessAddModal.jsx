@@ -26,6 +26,7 @@ export default function BusinessAddModal({getData, cities, provinces, isModal, s
         name: '',
         phone: '',
         email: '',
+        status: '',
         address: '',
         province_id: '',
         city_id: '',
@@ -57,7 +58,7 @@ export default function BusinessAddModal({getData, cities, provinces, isModal, s
         setDList((prevItems) => prevItems.filter((item) => item.id !== itemId));
     }
 
-     async function postData() {
+    async function postData() {
         if(!data?.name){
             const message = "Name is required."
             toast.warn(message, reactToastifyDark)
@@ -93,19 +94,18 @@ export default function BusinessAddModal({getData, cities, provinces, isModal, s
             setIsSubmit(false)
             return
         }
-       
         const formData = new FormData();
         formData.append('image', data?.image)
         formData.append('name', data?.name)
         formData.append('phone', data?.phone)
         formData.append('email', data?.email)
+        formData.append('status', 'Posted')
         formData.append('address', data?.address)
         formData.append('description', description)
         formData.append('price', data?.price)
         formData.append('province_id', data?.province_id)
         formData.append('city_id', data?.city_id)
         formData.append('business_details', JSON.stringify(dList))
-
         try{
             const res = await _businessStoreAction(formData);
             if(res.status == 1) {

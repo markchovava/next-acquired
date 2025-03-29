@@ -5,18 +5,10 @@ import React, { useState } from 'react'
 
 
 export default function AppInfoView({dbData}) {
+    console.log('dbData', dbData)
     const [data, setData] = useState(dbData?.data)
-    const [isModal, setIsModal] = useState(false)
-
-    async function getData(){
-        const res = await _appInfoViewAction()
-        await setData(res?.data);
-    }
-
 
    
-
-
   return (
     <>
 
@@ -26,12 +18,6 @@ export default function AppInfoView({dbData}) {
             {!data ?
                 <section className='w-[100%]'>
                     <h3 className='text-[3rem] font-light'>No Data Available at the moment.</h3>
-                    <p>Click 
-                        <span className='cursor-pointer underline hover:no-underline mx-1' onClick={() => setIsModal(!isModal)}>
-                            Edit
-                            </span> 
-                        to add.
-                    </p>
                 </section>
              :
                 <section>

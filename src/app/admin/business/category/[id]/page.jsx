@@ -5,10 +5,18 @@ import BusinessCategoryEdit from './components/BusinessCategoryEdit'
 import { _businessViewAction } from '@/actions/BusinessActions'
 import { _categoryListAllAction } from '@/actions/CategoryActions'
 import { _businessCategoryByBusinessAction } from '@/actions/BusinessCategoryActions'
+import { cookies } from 'next/headers'
+import { redirect } from 'next/navigation'
+import ClientRedirect from '@/app/_components/ClientRedirect'
 
 
 
 export default async function page({ params: {id} }) {
+  const cookieStore = await cookies();
+  const adminCookie = await cookieStore.get('ACQUIREDZW_ADMIN_COOKIE');
+  if(!adminCookie?.value){ redirect('/login') }
+  if(adminCookie?.value != 'Yes'){ return <ClientRedirect /> }
+  /*  */
   const [businessData, categoriesData, businessCategoryData] = await Promise.all([
     _businessViewAction(id), 
     _categoryListAllAction(), _businessCategoryByBusinessAction(id)])

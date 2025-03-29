@@ -25,7 +25,7 @@ export default function BusinessView({id, dbData, citiesData, provincesData}) {
         <div className='mx-auto w-[90%]'>
             <div className='flex items-center justify-end gap-3'>
                 <Link
-                    href={`/admin/business/category/${id}`}
+                    href={`/client/business/category/${id}`}
                     className='duration-100 ease-linear transition-all border border-white bg-gradient-to-br from-blue-300 to-gray-800 hover:bg-gradient-to-br hover:from-white hover:to-white hover:border hover:border-gray-800 text-white hover:text-gray-800 hover:drop-shadow-md rounded-xl px-4 py-2'>
                     Edit Category
                 </Link>
@@ -53,6 +53,15 @@ export default function BusinessView({id, dbData, citiesData, provincesData}) {
             <div className='mb-6'>
                 <p className='text-sm font-semibold'>Name:</p>
                 <p className='text-lg'>{data?.name}</p>
+            </div>
+            {/*  */}
+            <div className='mb-6'>
+                <p className='text-sm font-semibold mb-1'>Status:</p>
+                <p className='text-lg'>
+                    <span className='px-2 py-1 rounded-lg bg-cyan-100 drop-shadow'>
+                        {data?.status}
+                    </span>
+                </p>
             </div>
             {/*  */}
             <div className='mb-6'>
@@ -84,7 +93,7 @@ export default function BusinessView({id, dbData, citiesData, provincesData}) {
             {/*  */}
             <div className='mb-6'>
                 <p className='text-sm font-semibold'>Asking Price:</p>
-                <p className='text-lg'>{data?.price}</p>
+                <p className='text-lg'>{data?.price ? '$' + data?.price : 'Not Added.'}</p>
             </div>
             {/* DESCRIPTION */}
             <div className='mb-6'>

@@ -6,8 +6,30 @@ import { redirect } from "next/navigation";
 
 
 
+export async function businessListStatusActiveAction() {
+  const res = await fetch(`${baseURL}business-status-active`, {
+    'method': 'GET',
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+    }
+  });
+  return await res.json();
+}
+
 export async function businessListAction() {
   const res = await fetch(`${baseURL}business`, {
+    'method': 'GET',
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+    }
+  });
+  return await res.json();
+}
+
+export async function businessStatusListAction(status) {
+  const res = await fetch(`${baseURL}business-status/${status}`, {
     'method': 'GET',
     headers: {
       'Accept': 'application/json',
@@ -88,6 +110,51 @@ export async function businessViewAction(id) {
 
 
 /* --------------------------------------------- */
+
+export async function _businessListByUserAction() {
+  const cookieStore = await cookies();
+  const authToken = await cookieStore.get('ACQUIREDZW_AUTH_COOKIE');
+  if(!authToken?.value){ redirect('/login'); }
+  const res = await fetch(`${baseURL}api/business-user`, {
+    'method': 'GET',
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${authToken?.value}`,
+    }
+  });
+  return await res.json();
+}
+
+export async function _businessByStatusAction(status) {
+  const cookieStore = await cookies();
+  const authToken = await cookieStore.get('ACQUIREDZW_AUTH_COOKIE');
+  if(!authToken?.value){ redirect('/login'); }
+  const res = await fetch(`${baseURL}api/business-status/${status}`, {
+    'method': 'GET',
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${authToken?.value}`,
+    }
+  });
+  return await res.json();
+}
+
+export async function _businessSearchByUserAction(search) {
+  const cookieStore = await cookies();
+  const authToken = await cookieStore.get('ACQUIREDZW_AUTH_COOKIE');
+  if(!authToken?.value){ redirect('/login'); }
+  const res = await fetch(`${baseURL}api/business-user-search/${search}`, {
+    'method': 'GET',
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${authToken?.value}`,
+    }
+  });
+  return await res.json();
+}
 
 export async function _businessListAction() {
     const cookieStore = await cookies();

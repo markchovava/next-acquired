@@ -47,6 +47,41 @@ export async function registerAction(data) {
     return await res.json();
 }
 
+export async function _emailAction(data) {
+  const cookieStore = await cookies();
+  const authToken = await cookieStore.get('ACQUIREDZW_AUTH_COOKIE');
+  if(!authToken?.value){ redirect('/login'); }
+  const res = await fetch(`${baseURL}api/email`, {
+    'method': 'POST',
+    body: JSON.stringify(data),
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${authToken?.value}`,
+    }
+  });
+  revalidatePath('/admin/profile');
+  revalidatePath('/client/profile');
+  return await res.json();
+}
+export async function _passwordAction(data) {
+  const cookieStore = await cookies();
+  const authToken = await cookieStore.get('ACQUIREDZW_AUTH_COOKIE');
+  if(!authToken?.value){ redirect('/login'); }
+  const res = await fetch(`${baseURL}api/password`, {
+    'method': 'POST',
+    body: JSON.stringify(data),
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${authToken?.value}`
+    }
+  });
+  revalidatePath('/admin/profile');
+  revalidatePath('/client/profile');
+  return await res.json();
+}
+
 
 export async function _profileAction() {
   const cookieStore = cookies();

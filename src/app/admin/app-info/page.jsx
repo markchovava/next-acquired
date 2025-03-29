@@ -3,11 +3,19 @@ import React from 'react'
 import { FaAngleRight } from 'react-icons/fa6'
 import AppInfoView from './_components/AppInfoView'
 import { _appInfoViewAction } from '@/actions/AppInfoActions'
+import ClientRedirect from '../_components/ClientRedirect';
+import { redirect } from 'next/navigation';
+import { cookies } from 'next/headers'; 
 
 
 
 
 export default async function page() {
+  const cookieStore = await cookies();
+  const adminCookie = await cookieStore.get('ACQUIREDZW_ADMIN_COOKIE');
+  if(!adminCookie?.value){ redirect('/login') }
+  if(adminCookie?.value != 'Yes'){ return <ClientRedirect /> }
+  /* APP INFO */
   const [appInfoData] = await Promise.all([_appInfoViewAction(),  ]) 
   
   return (

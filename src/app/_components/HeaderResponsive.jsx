@@ -5,6 +5,14 @@ import { FaUser } from "react-icons/fa6";
 import { GiHamburgerMenu } from "react-icons/gi";
 import { AnimatePresence, motion } from 'framer-motion';
 import Logo from './Logo';
+import { getCookie } from 'cookies-next';
+import { cookieAuthClient } from '@/cookies/cookieAuthClient';
+import { cookieAdminClient } from '@/cookies/cookieAdminClient';
+import { cookieRoleClient } from '@/cookies/cookieRoleClient';
+import { toast } from 'react-toastify';
+import { reactToastifyDark } from '@/utils/reactToastify';
+import { _logoutAction } from '@/actions/AuthActions';
+import { useRouter } from 'next/navigation';
 
 
 const ulVariant = {
@@ -16,7 +24,33 @@ const ulVariant = {
 
 
 export default function HeaderResponsive() {
+    const authToken = getCookie('ACQUIREDZW_AUTH_COOKIE');
+    const adminToken = getCookie('ACQUIREDZW_ADMIN_COOKIE');
+    const router = useRouter();
     const [isActive, setIsActive] = useState(false);
+    const { removeAuthCookie } = cookieAuthClient()
+    const { removeAdminCookie } = cookieAdminClient()
+    const { removeRoleCookie,  } = cookieRoleClient()
+
+    async function postLogout() {
+            try{
+            const res = await _logoutAction()
+            if(res?.status == 1) {
+                removeAuthCookie()
+                removeRoleCookie()
+                removeAdminCookie()
+                toast.success(res?.message, reactToastifyDark)
+                router.push('/login')
+                return
+            } }
+            catch (error) {
+                console.error(`Error: ${error}`)
+                console.error(`Error Message: ${error.message}`);
+                console.error(`Error Response: ${error.response}`);
+            } 
+    
+        }
+
 
   return (
     <>
@@ -32,8 +66,6 @@ export default function HeaderResponsive() {
             <FaUser className={`group-hover:text-amber-600 duration-100 ease-in-out transtion-all`} />
         </button>
     </div>
-   
-
 
    <AnimatePresence>
         {isActive &&
@@ -73,16 +105,54 @@ export default function HeaderResponsive() {
                         Brokers
                     </Link>
                 </motion.li>
+                {authToken ?
+                <>
+                <motion.li className='group'>
+                    <Link 
+                        href={adminToken == 'Yes' ? '/admin/profile' : '/client/profile'} 
+                        className='group-hover:text-amber-600 ease-linear duration-150 transition-all'>
+                        Profile
+                    </Link>
+                </motion.li>
+                <motion.li className='group'>
+                    <Link 
+                        href={adminToken == 'Yes' ? '/admin' : '/client'} 
+                        className='group-hover:text-amber-600 ease-linear duration-150 transition-all'>
+                        Dashboard
+                    </Link>
+                </motion.li>
+                {/* EMAIL */}
+                <motion.li className='group'>
+                    <Link 
+                        href={adminToken == 'Yes' ? '/admin/email' : '/client/email'} 
+                        className='group-hover:text-amber-600 ease-linear duration-150 transition-all'>
+                        Email
+                    </Link>
+                </motion.li>
+                {/* PASSWORD */}
+                <motion.li className='group'>
+                    <Link 
+                        href={adminToken == 'Yes' ? '/admin/password' : '/client/password'} 
+                        className='group-hover:text-amber-600 ease-linear duration-150 transition-all'>
+                        Password
+                    </Link>
+                </motion.li>
+                {/* LOGOUT */}
+                <motion.li className='group'>
+                    <button 
+                        onClick={() => postLogout()}
+                        className='group-hover:text-amber-600 ease-linear duration-150 transition-all'>
+                        Logout
+                    </button>
+                </motion.li>
+                </>
+                :
                 <motion.li className='group'>
                     <Link href="/login" className='group-hover:text-amber-600 ease-linear duration-150 transition-all'>
                         Login
                     </Link>
                 </motion.li>
-                <motion.li className='group'>
-                    <Link href="/admin/profile" className='group-hover:text-amber-600 ease-linear duration-150 transition-all'>
-                        Profile
-                    </Link>
-                </motion.li>
+                }
             </motion.ul>
         }
    </AnimatePresence>

@@ -22,11 +22,11 @@ export default async function page({ params: {id} }) {
         <ul className='flex items-center justify-start gap-2 text-sm'>
           <li><Link href="/">Home</Link></li>
           <li><FaAngleRight /></li>
-          <li><Link href="/admin">Dashboard</Link></li>
+          <li><Link href="/client">Dashboard</Link></li>
           <li><FaAngleRight /></li>
-          <li><Link href="/admin/business" >Business List</Link></li>
+          <li><Link href="/client/business" >Business List</Link></li>
           <li><FaAngleRight /></li>
-          <li><Link href={`/admin/business/category/${id}`} className='font-bold '>Edit Business Category</Link></li>
+          <li><Link href={`/client/business/category/${id}`} className='font-bold '>Edit Business Category</Link></li>
         </ul>
       </div>
      </section>
@@ -41,7 +41,7 @@ export default async function page({ params: {id} }) {
 
     <section className='w-[100%] pt-3'>
       <div className='w-[90%] mx-auto flex items-center justify-end'>
-        <Link href={`/admin/business/${id}`} className='duration-100 ease-linear transition-all border border-gray-800 hover:bg-gray-800 hover:text-white hover:drop-shadow-md rounded-xl px-4 py-2'>
+        <Link href={`/client/business/${id}`} className='duration-100 ease-linear transition-all border border-gray-800 hover:bg-gray-800 hover:text-white hover:drop-shadow-md rounded-xl px-4 py-2'>
         View Business
         </Link>
       </div>

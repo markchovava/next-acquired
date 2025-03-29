@@ -18,9 +18,9 @@ export default async function page() {
         <ul className='flex items-center justify-start gap-2 text-sm'>
           <li><Link href="/">Home</Link></li>
           <li><FaAngleRight /></li>
-          <li><Link href="/admin">Dashboard</Link></li>
+          <li><Link href="/client">Dashboard</Link></li>
           <li><FaAngleRight /></li>
-          <li><Link href="/admin/app-info" className='font-bold '>AppInfo</Link></li>
+          <li><Link href="/client/app-info" className='font-bold '>AppInfo</Link></li>
 
         </ul>
       </div>

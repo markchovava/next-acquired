@@ -17,11 +17,11 @@ export default async function page({ params: {id} }) {
             <ul className='flex items-center justify-start gap-2 text-sm'>
               <li><Link href="/">Home</Link></li>
               <li><FaAngleRight /></li>
-              <li><Link href="/admin">Dashboard</Link></li>
+              <li><Link href="/client">Dashboard</Link></li>
               <li><FaAngleRight /></li>
-              <li><Link href="/admin/message/business">Business Message List</Link></li>
+              <li><Link href="/client/message/business">Business Message List</Link></li>
               <li><FaAngleRight /></li>
-              <li><Link href={`/admin/message/business/${id}`} className='font-bold '>Business Message</Link></li>
+              <li><Link href={`/client/message/business/${id}`} className='font-bold '>Business Message</Link></li>
     
             </ul>
           </div>

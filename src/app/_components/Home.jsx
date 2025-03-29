@@ -6,12 +6,13 @@ import { CiSearch } from "react-icons/ci";
 import { baseURL } from '@/apis/BaseURL';
 import Image from 'next/image';
 import { MainContextState } from '@/contexts/MainContext';
-import { businessListAction, businessPaginateAction, 
+import { businessListAction, businessListStatusActiveAction, businessPaginateAction, 
     businessSearchCityCategoryAction, businessSortListAction } from '@/actions/BusinessActions';
 
 
 
 export default function Home({dbData, citiesData, categoriesData}) {
+    console.log('dbData', dbData)
     const {businessState, businessDispatch,} = MainContextState();
     const [data, setData] = useState({
         category_id: '',
@@ -95,7 +96,7 @@ export default function Home({dbData, citiesData, categoriesData}) {
 
     async function getData() {
         try{
-            const res = await businessListAction();
+            const res = await businessListStatusActiveAction();
             businessDispatch({type: 'ADD_DATA', payload: {
                 items: res?.data,
                 prevURL: res?.links?.prev,

@@ -5,7 +5,7 @@ import { FaArrowLeftLong, FaArrowRightLong, FaEye } from 'react-icons/fa6';
 import { MdDeleteForever, MdEdit } from 'react-icons/md';
 import BusinessAddModal from './BusinessAddModal';
 import { AdminContextState } from '@/contexts/AdminContext';
-import { _businessDeleteAction, _businessListAction, _businessSearchAction } from '@/actions/BusinessActions';
+import { _businessDeleteAction, _businessListAction, _businessListByUserAction, _businessSearchAction, _businessSearchByUserAction } from '@/actions/BusinessActions';
 import { IoSearch } from 'react-icons/io5';
 import { reactToastifyDark } from '@/utils/reactToastify';
 import { toast } from 'react-toastify';
@@ -13,6 +13,7 @@ import { TbCategoryPlus } from "react-icons/tb";
 
 
 export default function BusinessList({dbData, citiesData, provincesData}) {
+    console.log('dbData', dbData)
     const {businessState, businessDispatch } = AdminContextState()
     const [isModal, setIsModal] = useState(false)
     const [search, setSearch] = useState('');
@@ -48,7 +49,7 @@ export default function BusinessList({dbData, citiesData, provincesData}) {
             return;
             }
             try{
-            const res = await _businessSearchAction(search);
+            const res = await _businessSearchByUserAction(search);
             businessDispatch({type: 'ADD_DATA', payload: {
                 items: res?.data,
                 prevURL: res?.links.prev,
@@ -63,7 +64,7 @@ export default function BusinessList({dbData, citiesData, provincesData}) {
 
     async function getData() {
         try{
-            const res = await _businessListAction();
+            const res = await _businessListByUserAction();
             businessDispatch({type: 'ADD_DATA', payload: {
                 items: res?.data,
                 prevURL: res?.links?.prev,
@@ -129,7 +130,7 @@ export default function BusinessList({dbData, citiesData, provincesData}) {
                     <div className='w-[25%] border-r border-white px-3 py-2'>NAME</div>
                     <div className='w-[20%] border-r border-white px-3 py-2'>ASKING PRICE</div>
                     <div className='w-[20%] border-r border-white px-3 py-2'>CATEGORY</div>
-                    <div className='w-[20%] border-r border-white px-3 py-2'>AUTHOR</div>
+                    <div className='w-[20%] border-r border-white px-3 py-2'>STATUS</div>
                     <div className='w-[15%] px-3 py-2 text-end'>ACTION</div>
                 </div>
 
@@ -138,7 +139,7 @@ export default function BusinessList({dbData, citiesData, provincesData}) {
                     businessState?.items?.map((i, key) => (
                     <div key={key} className='mx-auto w-[100%] py-2 flex items-center justify-start border-b border-x border-gray-300'>
                         <div className='w-[25%] border-r border-gray-300 px-3 py-2'>{i?.name ? i?.name : 'Not Added.'}</div>
-                        <div className='w-[20%] border-r border-gray-300 px-3 py-2'>{i?.price ? i?.price : 'Not Added.'}</div>
+                        <div className='w-[20%] border-r border-gray-300 px-3 py-2'>{i?.price ? '$' + i?.price : 'Not Added.'}</div>
                         <div className='w-[20%] border-r border-gray-300 px-3 py-2'>
                             {i?.categories?.length > 0 ?
                              i?.categories.map((a) => (a.name + ', '))
@@ -147,13 +148,15 @@ export default function BusinessList({dbData, citiesData, provincesData}) {
                             }
                         </div>
                         <div className='w-[20%] border-r border-gray-300 px-3 py-2'>
-                            {i?.user?.name ? i?.user?.name : (i?.user?.email ? i?.user?.email : 'Not Added.')}
+                            { i?.status ? 
+                            <span className='bg-cyan-100 drop-shadow px-2 py-1 rounded-lg'>{i?.status}</span> : 
+                            'Not Added.' }
                         </div>
                         <div className='w-[15%] px-3 py-2 text-end flex items-center justify-end gap-3 text-xl'>
-                            <Link title='View' href={`/admin/business/category/${i?.id}`}> 
+                            <Link title='Edit Category' href={`/client/business/category/${i?.id}`}> 
                             <TbCategoryPlus className='hover:text-green-500 duration-150 hover:scale-110 transition-all ease-in'/> 
                             </Link> 
-                            <Link title='View' href={`/admin/business/${i?.id}`}> 
+                            <Link title='View' href={`/client/business/${i?.id}`}> 
                             <FaEye className='hover:text-blue-500 duration-150 hover:scale-110 transition-all ease-in'/> 
                             </Link> 
                             <button title='Delete' onClick={() => deleteData(i?.id)}> 

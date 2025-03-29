@@ -7,8 +7,10 @@ import { IoSearch } from 'react-icons/io5';
 import { reactToastifyDark } from '@/utils/reactToastify';
 import { toast } from 'react-toastify';
 import { MainContextState } from '@/contexts/MainContext';
-import { _businessMessageDeleteAction, _businessMessageIndexByStatusAction, _businessMessageListAction, 
-    _businessMessagePaginateAction,  _businessMessageSearchAction } 
+import { _businessMessageDeleteAction, _businessMessageIndexByStatusAction, 
+    _businessMessageIndexByStatusUserAction, _businessMessageIndexByUserAction, 
+    _businessMessageListAction, _businessMessagePaginateAction,  
+    _businessMessageSearchAction, _businessMessageSearchByUserAction, } 
     from '@/actions/BusinessMessageActions';
 import { formatDate } from '@/utils/formatDate';
 
@@ -51,7 +53,7 @@ export default function BusinessMessageList({dbData}) {
             return;
             }
             try{
-            const res = await _businessMessageSearchAction(search);
+            const res = await _businessMessageSearchByUserAction(search);
             businessMessageDispatch({type: 'ADD_DATA', payload: {
                 items: res?.data,
                 prevURL: res?.links.prev,
@@ -66,7 +68,7 @@ export default function BusinessMessageList({dbData}) {
 
     async function getData() {
         try{
-            const res = await _businessMessageListAction();
+            const res = await _businessMessageIndexByUserAction();
             businessMessageDispatch({type: 'ADD_DATA', payload: {
                 items: res?.data,
                 prevURL: res?.links.prev,
@@ -78,6 +80,7 @@ export default function BusinessMessageList({dbData}) {
                 console.error(`Error: ${error}`); 
             }
     }
+
     async function getDataByStatus(e) {
         if(e == 'All') {
             console.log('All is')
@@ -85,7 +88,7 @@ export default function BusinessMessageList({dbData}) {
             return
         }
         try{
-            const res = await _businessMessageIndexByStatusAction(e);
+            const res = await _businessMessageIndexByStatusUserAction(e);
             businessMessageDispatch({type: 'ADD_DATA', payload: {
                 items: res?.data,
                 prevURL: res?.links.prev,
@@ -111,7 +114,7 @@ export default function BusinessMessageList({dbData}) {
         }
     }
 
-    console.log('businessMessageState', businessMessageState)
+ 
     
   return (
     <>
@@ -159,27 +162,29 @@ export default function BusinessMessageList({dbData}) {
             <section className='lg:w-[100%] w-[70rem]'>
                 {/* HEADER */}
                 <div className='mx-auto w-[100%] text-lg py-2 flex items-center justify-start font-bold font-white bg-gray-200 '>
-                    <div className='w-[35%] border-r border-white px-3 py-2'>BUSINESS</div>
+                    <div className='w-[25%] border-r border-white px-3 py-2'>SENDER</div>
+                    <div className='w-[25%] border-r border-white px-3 py-2'>BUSINESS</div>
                     <div className='w-[20%] border-r border-white px-3 py-2'>STATUS</div>
-                    <div className='w-[30%] border-r border-white px-3 py-2'>DATE</div>
-                    <div className='w-[15%] px-3 py-2 text-end'>ACTION</div>
+                    <div className='w-[20%] border-r border-white px-3 py-2'>DATE</div>
+                    <div className='w-[10%] px-3 py-2 text-end'>ACTION</div>
                 </div>
 
                 {/* COLUMN */}
                 { businessMessageState?.items?.length > 0 ?
                     businessMessageState?.items?.map((i, key) => (
                     <div key={key} className='mx-auto w-[100%] py-2 flex items-center justify-start border-b border-x border-gray-300'>
-                        <div className='w-[35%] border-r border-gray-300 px-3 py-2'>{i?.name}</div>
+                        <div className='w-[25%] border-r border-gray-300 px-3 py-2'>{i?.name ? i?.name : 'Not Added.'}</div>
+                        <div className='w-[25%] border-r border-gray-300 px-3 py-2'>{i?.business?.name ?? 'Not Added.'}</div>
                         <div className='w-[20%] border-r border-gray-300 px-3 py-2'>
                             <span className={`${i?.status == 'Read' ? 'bg-green-200' : 'bg-blue-200'} px-2 py-1 rounded-lg`}>
                                 {i?.status}
                             </span>
                         </div>
-                        <div className='w-[30%] border-r border-gray-300 px-3 py-2'>
+                        <div className='w-[20%] border-r border-gray-300 px-3 py-2'>
                             {formatDate(i?.updated_at)}
                         </div>
-                        <div className='w-[15%] px-3 py-2 text-end flex items-center justify-end gap-3 text-xl'>
-                            <Link title='View' href={`/admin/message/business/${i?.id}`}> 
+                        <div className='w-[10%] px-3 py-2 text-end flex items-center justify-end gap-3 text-xl'>
+                            <Link title='View' href={`/client/message/business/${i?.id}`}> 
                             <FaEye className='hover:text-blue-500 duration-150 hover:scale-110 transition-all ease-in'/> 
                             </Link> 
                             <button title='Delete' onClick={() => deleteData(i?.id)}> 

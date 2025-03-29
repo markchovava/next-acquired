@@ -5,10 +5,19 @@ import BusinessList from './_components/BusinessList';
 import { _businessListAction } from '@/actions/BusinessActions';
 import { _cityListAllAction } from '@/actions/CityActions';
 import { _provinceListAllAction } from '@/actions/ProvinceActions';
+import { cookies } from 'next/headers';
+import { redirect } from 'next/navigation';
+import ClientRedirect from '@/app/_components/ClientRedirect';
 
 
 export default async function page() {
-  const [businessData, citiesData, provincesData, ] = await Promise.all([_businessListAction(), _cityListAllAction(), _provinceListAllAction(), ]);
+  const cookieStore = await cookies();
+  const adminCookie = await cookieStore.get('ACQUIREDZW_ADMIN_COOKIE');
+  if(!adminCookie?.value){ redirect('/login') }
+  if(adminCookie?.value != 'Yes'){ return <ClientRedirect /> }
+  /*  */
+  const [businessData, citiesData, provincesData, ] = await Promise.all([
+        _businessListAction(), _cityListAllAction(), _provinceListAllAction(), ]);
 
 
   return (

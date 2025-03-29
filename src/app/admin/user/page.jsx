@@ -5,10 +5,18 @@ import UserList from './_components/UserList'
 import { _userListAction } from '@/actions/UserActions'
 import { _membershipListAllAction } from '@/actions/MembershipActions'
 import { _roleListAllAction } from '@/actions/RoleActions'
+import { cookies } from 'next/headers'
+import { redirect } from 'next/navigation'
+import ClientRedirect from '@/app/_components/ClientRedirect'
 
 
 
 export default async function page() {
+  const cookieStore = await cookies();
+  const adminCookie = await cookieStore.get('ACQUIREDZW_ADMIN_COOKIE');
+  if(!adminCookie?.value){ redirect('/login') }
+  if(adminCookie?.value != 'Yes'){ return <ClientRedirect /> }
+  /*  */
   const [ usersData, rolesData ] = await Promise.all([
     _userListAction(), 
     _roleListAllAction()

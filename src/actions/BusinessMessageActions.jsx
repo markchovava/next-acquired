@@ -26,11 +26,62 @@ export async function businessMessageStoreAction(data) {
         'Content-Type': 'application/json',
       }
     });
+    revalidatePath(`/admin/message/business`);
+    revalidatePath(`/client/message/business`);
     return await res.json();
 }
 
 
 /* AUTHENTICATION */
+""
+'/business-message-index-by-status-user/{status}'
+""
+
+export async function _businessMessageIndexByStatusUserAction(status) {
+  const cookieStore = await cookies();
+  const authToken = await cookieStore.get('ACQUIREDZW_AUTH_COOKIE');
+  if(!authToken?.value){ redirect('/login'); }
+  const res = await fetch(`${baseURL}api/business-message-index-by-status-user/${status}`, {
+    'method': 'GET',
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${authToken?.value}`
+    }
+  });
+  return await res.json();
+}
+
+export async function _businessMessageSearchByUserAction(search) {
+  const cookieStore = await cookies();
+  const authToken = await cookieStore.get('ACQUIREDZW_AUTH_COOKIE');
+  if(!authToken?.value){ redirect('/login'); }
+  const res = await fetch(`${baseURL}api/business-message-user-search/${search}`, {
+    'method': 'GET',
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${authToken?.value}`
+    }
+  });
+  return await res.json();
+}
+
+export async function _businessMessageIndexByUserAction() {
+  const cookieStore = await cookies();
+  const authToken = await cookieStore.get('ACQUIREDZW_AUTH_COOKIE');
+  if(!authToken?.value){ redirect('/login'); }
+  const res = await fetch(`${baseURL}api/business-message-user`, {
+    'method': 'GET',
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${authToken?.value}`
+    }
+  });
+  return await res.json();
+}
+
 export async function _businessMessageIndexByStatusAction(status) {
   const cookieStore = await cookies();
   const authToken = await cookieStore.get('ACQUIREDZW_AUTH_COOKIE');
@@ -60,7 +111,6 @@ export async function _businessMessageIndexAllByStatusAction(status) {
   });
   return await res.json();
 }
-
 
 export async function _businessMessageStatusAction(data) {
   const cookieStore = await cookies();
@@ -106,6 +156,7 @@ export async function _businessMessageDeleteAction(id) {
       }
     });
     revalidatePath(`/admin/message/business`);
+    revalidatePath(`/client/message/business`);
     return await res.json();
 }
 

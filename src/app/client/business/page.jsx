@@ -2,14 +2,16 @@ import Link from 'next/link';
 import React from 'react';
 import { FaAngleRight } from 'react-icons/fa6';
 import BusinessList from './_components/BusinessList';
-import { _businessListAction } from '@/actions/BusinessActions';
+import { _businessListByUserAction } from '@/actions/BusinessActions';
 import { _cityListAllAction } from '@/actions/CityActions';
 import { _provinceListAllAction } from '@/actions/ProvinceActions';
 
 
 export default async function page() {
-  const [businessData, citiesData, provincesData, ] = await Promise.all([_businessListAction(), _cityListAllAction(), _provinceListAllAction(), ]);
+  const [businessData, citiesData, provincesData, ] = await Promise.all([
+        _businessListByUserAction(), _cityListAllAction(), _provinceListAllAction(), ]);
 
+        
 
   return (
     <>
@@ -19,9 +21,9 @@ export default async function page() {
         <ul className='flex items-center justify-start gap-2 text-sm'>
           <li><Link href="/">Home</Link></li>
           <li><FaAngleRight /></li>
-          <li><Link href="/admin">Dashboard</Link></li>
+          <li><Link href="/client">Dashboard</Link></li>
           <li><FaAngleRight /></li>
-          <li><Link href="/admin/business" className='font-bold '>Business List</Link></li>
+          <li><Link href="/client/business" className='font-bold '>Business List</Link></li>
         </ul>
       </div>
      </section>

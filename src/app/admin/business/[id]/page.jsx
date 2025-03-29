@@ -5,16 +5,21 @@ import BusinessView from './_components/BusinessView'
 import { _businessViewAction } from '@/actions/BusinessActions'
 import { _cityListAllAction } from '@/actions/CityActions'
 import { _provinceListAllAction } from '@/actions/ProvinceActions'
+import { redirect } from 'next/navigation';
+import { cookies } from 'next/headers';
+import ClientRedirect from '@/app/_components/ClientRedirect'
 
 
 
 
 export default async function page({ params: {id} }) {
+  const cookieStore = await cookies();
+  const adminCookie = await cookieStore.get('ACQUIREDZW_ADMIN_COOKIE');
+  if(!adminCookie?.value){ redirect('/login') }
+  if(adminCookie?.value != 'Yes'){ return <ClientRedirect /> }
+  /*  */
   const [businessData, citiesData, provincesData, ] = await Promise.all([
-                                                        _businessViewAction(id), 
-                                                        _cityListAllAction(), 
-                                                        _provinceListAllAction(),
-                                                      ])
+        _businessViewAction(id), _cityListAllAction(), _provinceListAllAction() ])
 
   return (
     <>
