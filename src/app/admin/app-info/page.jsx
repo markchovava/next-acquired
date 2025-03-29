@@ -3,9 +3,9 @@ import React from 'react'
 import { FaAngleRight } from 'react-icons/fa6'
 import AppInfoView from './_components/AppInfoView'
 import { _appInfoViewAction } from '@/actions/AppInfoActions'
-import ClientRedirect from '../_components/ClientRedirect';
 import { redirect } from 'next/navigation';
 import { cookies } from 'next/headers'; 
+import ClientRedirect from '@/app/_components/ClientRedirect'
 
 
 
